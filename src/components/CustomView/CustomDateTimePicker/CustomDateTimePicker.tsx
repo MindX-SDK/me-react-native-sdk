@@ -97,7 +97,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
       finalDate.minute(time.getMinutes());
       finalDate.second(time.getSeconds());
     }
-    console.log(finalDate.toLocaleString());
 
     onConfirm?.(finalDate.toDate(), endDate);
   }
