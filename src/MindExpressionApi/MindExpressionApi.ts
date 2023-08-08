@@ -1,6 +1,6 @@
 import ErrorHandler from "../utils/errors/ErrorHandler";
 import { ExpressionApi } from "../services/ExpressionApi/ExpressionApi";
-import { GatewayResponse, TemplateObject } from "../services/ExpressionApi/ExpressionApi.types";
+import { GatewayResponse, TemplateObject, TemplateTypes } from "../services/ExpressionApi/ExpressionApi.types";
 import { ApiHelper, DateTimeHelper } from "../utils";
 import { initUUID } from "../utils/helpers/UuidHelper";
 import { ConversationData, MindExpressionApiEvents, MindExpressionApiEventArgs } from "./MindExpressionApi.type";
@@ -49,7 +49,7 @@ export class MindExpressionApi {
      * @param options options to custom MindExpressionApi:
      *      - useLogger @type {boolean}: log all events or not
      */
-    constructor (engineUrl: string, authKey: string, deviceUinqueId?: string, options?: {
+    constructor(engineUrl: string, authKey: string, deviceUinqueId?: string, options?: {
         useLogger?: boolean,
     }) {
         this.engineUrl = engineUrl;
@@ -79,7 +79,7 @@ export class MindExpressionApi {
             this.SCOPE_ID = '';
             this.logger?.logEvent('init', 'failed', e);
         }
-        
+
     }
 
     /**
@@ -93,7 +93,7 @@ export class MindExpressionApi {
         this.resetSession();
         this.currentQueryId = initUUID();
         this.currentTimestamp = DateTimeHelper.getCurrentTimestamp();
-        
+
 
         let res: GatewayResponse;
         try {
@@ -125,15 +125,15 @@ export class MindExpressionApi {
             this.updateCAIMessages(
                 res,
             );
-            
+
             this.setSession(res?.["X-Conversation-Id"]);
             this.logger?.logEvent('greeting', 'succeed', res?.data);
 
-        } catch(e: any) {
+        } catch (e: any) {
             res = ErrorHandler.handleGatewayError(e);
             this.logger?.logEvent('greeting', 'failed', res);
         }
-        
+
         return res;
     }
 
@@ -148,8 +148,8 @@ export class MindExpressionApi {
         return this.greeting();
     }
 
-    
-    converse = async(query: string): Promise<GatewayResponse> => {
+
+    converse = async (query: string): Promise<GatewayResponse> => {
         this.logger?.logEvent('converse', 'triggered');
 
         let res: GatewayResponse;
@@ -168,7 +168,7 @@ export class MindExpressionApi {
 
         this.currentQueryId = initUUID();
         this.currentTimestamp = DateTimeHelper.getCurrentTimestamp();
-       
+
         try {
             this.updateUserMessage(query);
 
@@ -198,14 +198,14 @@ export class MindExpressionApi {
             this.updateCAIMessages(
                 res,
             );
-            
+
             this.setSession(res?.["X-Conversation-Id"]);
             this.logger?.logEvent('converse', 'succeed', res?.data);
-        } catch(e: any) {
+        } catch (e: any) {
             this.logger?.logEvent('converse', 'failed', e);
             res = ErrorHandler.handleGatewayError(e);
         }
-        
+
         return res;
     }
 
@@ -273,24 +273,23 @@ export class MindExpressionApi {
     private updateCAIMessages = (
         response: GatewayResponse,
     ) => {
-        console.log("isejai", response)
         const channelResults = response?.data?.["channel-result"] ?? [];
 
         for (let i = 0; i < channelResults?.length; i++) {
             const channelResult = channelResults[i];
 
-            const channelInstruction = this.isNotEmptyTemplateObject(channelResult?.["channel-instruction"])
+            const channelInstruction = this.isValidMessageObject(channelResult?.["channel-instruction"])
                 ? channelResult?.["channel-instruction"]
                 : undefined;
             const channelInstructionAlt = channelResult?.["channel-instruction-alt"]?.channels?.length &&
-                this.isNotEmptyTemplateObject(channelResult?.["channel-instruction-alt"]?.channels?.[0])
+                this.isValidMessageObject(channelResult?.["channel-instruction-alt"]?.channels?.[0])
                 ? channelResult?.["channel-instruction-alt"]
                 : undefined;
-            const channelMessage = this.isNotEmptyTemplateObject(channelResult?.["channel-message"])
+            const channelMessage = this.isValidMessageObject(channelResult?.["channel-message"])
                 ? channelResult?.["channel-message"]
                 : undefined;
             const channelMessageAlt = channelResult?.["channel-message-alt"]?.channels?.length &&
-                this.isNotEmptyTemplateObject(channelResult?.["channel-message-alt"]?.channels?.[0])
+                this.isValidMessageObject(channelResult?.["channel-message-alt"]?.channels?.[0])
                 ? channelResult?.["channel-message-alt"]
                 : undefined;
 
@@ -322,7 +321,7 @@ export class MindExpressionApi {
                     );
                 }
             }
-    
+
             if (channelMessage) {
                 const finalTimestamp = DateTimeHelper.getCurrentTimestamp();
                 this.updateMessageList(
@@ -346,15 +345,17 @@ export class MindExpressionApi {
                     );
                 }
             }
-            
+
         }
-        
+
     }
 
-    private isNotEmptyTemplateObject(obj?: TemplateObject): boolean {
-        return !!(obj?.template ||
-            obj?.["card-list"]?.length ||
-            obj?.["image-url"] ||
-            obj?.datetime);
+    private isValidMessageObject(obj?: TemplateObject): boolean {
+        return !!obj?.["template-type"] &&
+            TemplateTypes.includes(obj?.["template-type"]) &&
+            !!(obj?.template ||
+                obj?.["card-list"]?.length ||
+                obj?.["image-url"] ||
+                obj?.datetime);
     }
 }

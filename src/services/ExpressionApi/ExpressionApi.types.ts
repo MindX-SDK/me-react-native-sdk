@@ -191,9 +191,9 @@ export interface DateTimeObjects {
     /**Has limit or not */
     "date-limit": boolean;
     /**Min date if  date-limit is @true */
-    "min-date": Date | null | undefined;
+    "min-date": string | null | undefined;
     /**Max date if  date-limit is @true */
-    "max-date": Date | null | undefined;
+    "max-date": string | null | undefined;
     /**Label of confirm button */
     "button-label": string;
 }
@@ -206,7 +206,9 @@ export interface AttachmentObjects {
 
 }
 
-export type TemplateType = 'text' | 'card' | 'quick_reply' | 'image' | 'code' | 'free' | 'datetime';
+export const TemplateTypes = ['text', 'card', 'quick_reply', 'image', 'code', 'free', 'datetime'] as const;
+export type TemplateType = (typeof TemplateTypes)[number];
+
 export type ButtonType = 'link' | 'message';
 export type DateTimePickerType = 'date' | 'datetime' | 'time' | 'date_range';
 export type AttachmentType = 'image' | 'video' | 'file' | 'record';

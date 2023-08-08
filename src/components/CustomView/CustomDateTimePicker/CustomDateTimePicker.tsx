@@ -123,7 +123,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
       <View style={styles.rowContainer}>
         { showPickDate 
           ? renderCommonTextGroup(isDateRange ? 'Start Date' :'Selected Date',
-            DateTimeHelper.formatDate(date, 'll')
+            DateTimeHelper.formatDate(date, 'll') ?? '-'
           )
           : undefined
         }
@@ -132,10 +132,10 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           : undefined
         }
         {showPickTime
-          ? renderCommonTextGroup('Selected Time', DateTimeHelper.formatDate(time, 'hh:mm A'))
+          ? renderCommonTextGroup('Selected Time', DateTimeHelper.formatDate(time, 'hh:mm A') ?? '-')
           : isDateRange
           ? renderCommonTextGroup('End Date',
-            DateTimeHelper.formatDate(endDate, 'll')
+            DateTimeHelper.formatDate(endDate, 'll') ?? '-'
           )
           : undefined
         }
@@ -349,6 +349,7 @@ const styles = StyleSheet.create({
     marginVertical: vs(4),
   },
   button: {
+    // flex: 1,
     minWidth: s(120),
     borderRadius: st(2),
     padding: st(10),
