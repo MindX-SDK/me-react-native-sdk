@@ -71,7 +71,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     if (!date) {
       setDate(mDay.toDate());
     } else if(!endDate) {
-
       if (mDay.isSameOrBefore(mStart, 'd')) {
         setEndDate(mStart?.toDate());
         setDate(mDay.toDate());
@@ -79,10 +78,14 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         setEndDate(mDay.toDate());
       }
     } else {
-      if (mDay.isAfter(mEnd, 'd')) {
-        setEndDate(mDay.toDate());
-      } else if (mDay.isSame(mEnd, 'd')) {
+      if (mDay.isSame(mStart, 'd')) {
+        setDate(undefined);
         setEndDate(undefined);
+      } else if (mDay.isSame(mEnd, 'd')) {
+        setDate(mDay.toDate());
+        setEndDate(undefined);
+      } else if (mDay.isAfter(mStart, 'd')) {
+        setEndDate(mDay.toDate());
       } else {
         setDate(mDay.toDate());
       }
@@ -234,7 +237,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             data={hours}
             defaultValue={timeParts?.hours}
             onSelect={(selectedItem, index) => {
-              time.setHours(isPM ? selectedItem + 12 : selectedItem);
+              time.setHours(isPM && selectedItem !== 12 ? selectedItem + 12 : selectedItem);
               setTime(new Date(time));
             }}
           />
@@ -250,9 +253,9 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             data={timePeriod}
             defaultValue={timeParts?.period}
             onSelect={(selectedItem, index) => {
-              time?.setHours(selectedItem === 'PM'
+              time?.setHours(selectedItem === 'PM' && !isPM
                 ? timeParts?.hours + 12
-                : timeParts?.hours
+                : timeParts?.hours - 12
               );
               setTime(new Date(time));
             }}
@@ -366,5 +369,5 @@ const styles = StyleSheet.create({
 });
 
 const hours = [...Array(12).keys()].map(it => it += 1); // start from 1 to 12
-const minutes = [...Array(60).keys()];
+const minutes = [...Array(60).keys()].filter(it => it % 5 === 0);
 const timePeriod = ['AM', 'PM'];

@@ -70,7 +70,7 @@ export const formatMindXDatetime = (
 
     // change to moment format type
     format = format.replace(/AM\/PM/g, 'A');
-    format = format.replace(/HH:MM/g, 'HH:mm');
+    format = format.replace(/HH:MM/g, 'hh:mm');
 
     //Handle specials chars
     if (format.includes('오전/오후')) {
