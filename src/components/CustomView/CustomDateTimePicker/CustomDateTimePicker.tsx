@@ -236,6 +236,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           <CustomTimeDropdown
             data={hours}
             defaultValue={timeParts?.hours}
+            selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setHours(isPM && selectedItem !== 12 ? selectedItem + 12 : selectedItem);
               setTime(new Date(time));
@@ -243,7 +244,8 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           />
           <CustomTimeDropdown
             data={minutes}
-            defaultValue={timeParts?.minutes}
+            defaultValue={minutes?.find(it => it > timeParts?.minutes) ?? 0}
+            selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setMinutes(selectedItem);
               setTime(new Date(time));
@@ -349,6 +351,9 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.blueBayoux20,
     marginVertical: vs(4),
+  },
+  selectedRow: {
+    backgroundColor: colors.earlyDawn,
   },
   button: {
     // flex: 1,
