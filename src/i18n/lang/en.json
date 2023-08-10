@@ -1,0 +1,11 @@
+{
+  "selected_date": "Selected Date",
+  "selected_time": "Selected Time",
+  "time": "Time",
+  "please_select_a_date": "Please select a date",
+  "please_select_a_valid_time": "Please select a valid time",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "please_select_a_valid_date_range": "Please select a valid date range"
+
+}

@@ -70,12 +70,12 @@ export const formatMindXDatetime = (
 
     // change to moment format type
     format = format.replace(/AM\/PM/g, 'A');
-    format = format.replace(/HH:MM/g, 'hh:mm');
 
     //Handle specials chars
     if (format.includes('오전/오후')) {
         format = format.replace(/오전\/오후/g, 'A[.k]');
     }
+    format = format.replace(/HH:MM/g, format.includes('A') ? 'hh:mm' : 'HH:mm');
 
     if (datetime?.valueOf?.()) {
         let mDateStr = moment(datetime).format(format);

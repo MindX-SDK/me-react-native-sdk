@@ -1,0 +1,11 @@
+{
+  "selected_date": "วันที่ที่เลือก",
+  "selected_time": "เวลาที่เลือก",
+  "time": "เวลา",
+  "please_select_a_date": "วันที่เริ่มต้น",
+  "please_select_a_valid_time": "วันที่สิ้นสุด",
+  "start_date": "โปรดเลือกวันที่",
+  "end_date": "โปรดเลือกเวลาที่ถูกต้อง",
+  "please_select_a_valid_date_range": "โปรดเลือกช่วงวันที่ที่ถูกต้อง"
+
+}

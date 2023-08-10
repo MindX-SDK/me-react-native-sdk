@@ -10,6 +10,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import moment from 'moment';
 import CustomTimeDropdown from './components/CustomTimeDropdown';
 import { MarkedDates } from 'react-native-calendars/src/types';
+import { translate } from '../../../i18n';
 
 LocaleConfig.locales['en'] = {
   formatAccessibilityLabel: "dddd d 'of' MMMM 'of' yyyy",
@@ -32,6 +33,7 @@ LocaleConfig.locales['en'] = {
   dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
   // numbers: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'] // number localization example
 };
+
 LocaleConfig.defaultLocale = 'en';
 
 export type CustomDateTimePickerProps = ViewProps & {
@@ -45,8 +47,8 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   //States
   const [date, setDate] = useState<Date | undefined>(
     pickerProps?.type === 'date_range'
-    ? undefined
-    : new Date()
+      ? undefined
+      : new Date()
   );
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [time, setTime] = useState<Date>(new Date());
@@ -55,6 +57,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   const showPickTime = ['datetime', 'time'].includes(pickerProps?.type);
   const isDateRange = pickerProps?.type === 'date_range';
   const timeParts = DateTimeHelper.getHourByPeriod(time);
+  const locale = pickerProps?.language;
 
   //Functions
   const handleDateSelect = (day: DateData) => {
@@ -63,14 +66,14 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     const mEnd = endDate ? moment(endDate) : undefined;
 
     //Case 1: Pick 1 date only
-    if (!isDateRange) { 
+    if (!isDateRange) {
       setDate(new Date(day.timestamp));
       return;
     }
     // Case 2: Pick date range
     if (!date) {
       setDate(mDay.toDate());
-    } else if(!endDate) {
+    } else if (!endDate) {
       if (mDay.isSameOrBefore(mStart, 'd')) {
         setEndDate(mStart?.toDate());
         setDate(mDay.toDate());
@@ -90,7 +93,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         setDate(mDay.toDate());
       }
     }
-    
+
   }
 
   const handleConfirm = () => {
@@ -123,23 +126,28 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   const renderSelectedDate = () => {
     return (
       <View style={styles.rowContainer}>
-        { showPickDate 
-          ? renderCommonTextGroup(isDateRange ? 'Start Date' :'Selected Date',
+        {showPickDate
+          ? renderCommonTextGroup(
+            translate(isDateRange ? 'start_date' : 'selected_date', undefined, locale),
             DateTimeHelper.formatDate(date, 'll') ?? '-'
           )
           : undefined
         }
-        { showPickDate
+        {showPickDate
           ? <Spacer width={10} />
           : undefined
         }
         {showPickTime
-          ? renderCommonTextGroup('Selected Time', DateTimeHelper.formatDate(time, 'hh:mm A') ?? '-')
-          : isDateRange
-          ? renderCommonTextGroup('End Date',
-            DateTimeHelper.formatDate(endDate, 'll') ?? '-'
+          ? renderCommonTextGroup(
+            translate('selected_time', undefined, locale),
+            DateTimeHelper.formatDate(time, 'hh:mm A') ?? '-'
           )
-          : undefined
+          : isDateRange
+            ? renderCommonTextGroup(
+              translate('end_date', undefined, locale),
+              DateTimeHelper.formatDate(endDate, 'll') ?? '-'
+            )
+            : undefined
         }
       </View>
     );
@@ -153,11 +161,17 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     if (mStart) {
       if (isDateRange) {
         markedDates[mStart.format('YYYY-MM-DD')] = {
-          startingDay: true,
+          startingDay: false,
+          endingDay: false,// !mEnd || mStart?.isSame(mEnd, 'd'),
+          selected: true,
           disableTouchEvent: false,
-          endingDay: !mEnd || mStart?.isSame(mEnd, 'd'),
-          color: colors.butterCup,
+          color: colors.earlyDawn,
           textColor: colors.white,
+          customContainerStyle: {
+            borderRadius: st(30),
+            backgroundColor: colors.butterCup,
+            marginRight: st(3.2),
+          },
         }
       } else {
         markedDates[mStart.format('YYYY-MM-DD')] = {
@@ -175,10 +189,16 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 
     if (mEnd) {
       markedDates[mEnd.format('YYYY-MM-DD')] = {
-        startingDay: mStart?.isSame(mEnd, 'd'),
-        endingDay: true,
-        color: colors.butterCup,
+        startingDay: false, // mStart?.isSame(mEnd, 'd'),
+        endingDay: false,
+        selected: true,
+        disableTouchEvent: false,
+        color: colors.earlyDawn,
         textColor: colors.white,
+        customContainerStyle: {
+          borderRadius: st(30),
+          backgroundColor: colors.butterCup,
+        }
       }
     }
 
@@ -188,7 +208,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         startingDay: false,
         endingDay: false,
       }
-      
+
     }
 
     return (
@@ -205,8 +225,8 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             dayTextColor: colors.black,
             todayTextColor: colors.mountainMeadow,
           }}
-          
-          initialDate={ date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
+
+          initialDate={date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
           onDayPress={day => {
             handleDateSelect(day);
           }}
@@ -222,7 +242,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           }
         />
       </View>
-      
+
     );
   }
 
@@ -231,20 +251,25 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     return (
       <View>
         <View style={styles.separator} />
-        <Text style={styles.subTitle}>Time</Text>
+        <Text style={styles.subTitle}>{translate('time', undefined, locale)}</Text>
         <View style={styles.rowContainer}>
           <CustomTimeDropdown
             data={hours}
             defaultValue={timeParts?.hours}
             selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
-              time.setHours(isPM && selectedItem !== 12 ? selectedItem + 12 : selectedItem);
+              time.setHours(isPM && selectedItem !== 12
+                ? selectedItem + 12
+                : selectedItem === 12
+                  ? 0
+                  : selectedItem
+              );
               setTime(new Date(time));
             }}
           />
           <CustomTimeDropdown
             data={minutes}
-            defaultValue={minutes?.find(it => it > timeParts?.minutes) ?? 0}
+            defaultValue={minutes?.find(it => it >= timeParts?.minutes) ?? 0}
             selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setMinutes(selectedItem);
@@ -263,14 +288,14 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             }}
           />
         </View>
-       
+
 
       </View>
     )
   }
 
   const renderButton = () => {
-    const isDisabled = isDateRange && (!date || !endDate); 
+    const isDisabled = isDateRange && (!date || !endDate);
     // || showPickDate && !date || showPickTime && !time //=> never happen since `date` and `time` have initial value
     return (
       <TouchableOpacity

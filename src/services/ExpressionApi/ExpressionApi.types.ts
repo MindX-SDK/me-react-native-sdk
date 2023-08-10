@@ -196,6 +196,8 @@ export interface DateTimeObjects {
     "max-date": string | null | undefined;
     /**Label of confirm button */
     "button-label": string;
+    /**Language of the option */
+    language: SupportLanguageType
 }
 
 export interface AttachmentObjects {
@@ -212,3 +214,6 @@ export type TemplateType = (typeof TemplateTypes)[number];
 export type ButtonType = 'link' | 'message';
 export type DateTimePickerType = 'date' | 'datetime' | 'time' | 'date_range';
 export type AttachmentType = 'image' | 'video' | 'file' | 'record';
+
+export const SupportLanguages = ['en', 'ko', 'th'] as const;
+export type SupportLanguageType = (typeof SupportLanguages)[number];

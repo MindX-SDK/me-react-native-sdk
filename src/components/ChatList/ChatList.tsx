@@ -61,6 +61,7 @@ const ChatList: React.FC<ChatListProps> = ({
         <CustomInputToolbar {...props} />
       )}
       shouldUpdateMessage={(currProps, nextProps) =>
+        //@ts-ignore
         currProps.extraData !== nextProps.extraData
       }
       {...restProps}
