@@ -14,7 +14,7 @@ export const getCurrentTimestamp = (isUTC: boolean = true) => {
     return now.valueOf();
 }
 
-export const formatDate = (date?: Date | string, format?: string) => {
+export const formatDate = (date?: Date | string | null, format?: string) => {
     if (!date) {
         return undefined;
     }
@@ -53,6 +53,34 @@ export const msToHMS = (ms: number) => {
     timeParts.push(seconds >= 10 ? `${seconds}` : `0${seconds}`);
 
     return timeParts?.join(':');
+}
+
+export const isBetween = (
+    date?: Date | string | null,
+    startDate?: Date | string | null,
+    endDate?: Date | string | null,
+) => {
+    if (!date) {
+        return undefined;
+    }
+    const mDate: moment.Moment = typeof date === 'string'
+        ? moment(date, 'YYYY/MM/DD') //FIXME: use common format
+        : moment(date);
+    const mStart: moment.Moment | undefined =
+        startDate
+            ? typeof startDate === 'string'
+                ? moment(startDate, 'YYYY/MM/DD') //FIXME: use common format
+                : moment(startDate)
+            : undefined;
+    const mEnd: moment.Moment | undefined =
+        endDate
+            ? typeof endDate === 'string'
+                ? moment(endDate, 'YYYY/MM/DD') //FIXME: use common format
+                : moment(endDate)
+            : undefined;
+
+    return (!mStart || mDate.isSameOrAfter(mStart)) &&
+        (!mEnd || mDate.isSameOrBefore(mEnd));
 }
 
 export const formatMindXDatetime = (

@@ -21,7 +21,11 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 }) => {
   //States
   const [date, setDate] = useState<Date | undefined>(
-    pickerProps?.type === 'date_range'
+    pickerProps?.type === 'date_range' || 
+      (pickerProps?.['date-limit-type'] === 'future_only' &&
+      !pickerProps?.['include-current-date']) || 
+        (pickerProps?.['date-limit-type'] === 'limited' &&
+        !DateTimeHelper.isBetween(new Date(), pickerProps?.['min-date'], pickerProps?.['max-date']))
       ? undefined
       : new Date()
   );

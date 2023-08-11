@@ -16,7 +16,7 @@
 ## Table of Contents
   - [Installation](#installation)
   - [Documentation and Examples](#documentation-and-examples)
-  - [Notice!!](#notice!!)
+    - [Notice!!](#notice!!)
 
   - [Features](#features)
     - [Init API](#init-api)
