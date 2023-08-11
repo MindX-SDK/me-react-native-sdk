@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
 import colors from '../../../utils/theme/colors';
 import { DateTimeHelper, s, st, vs } from '../../../utils';
@@ -58,6 +58,12 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   const isDateRange = pickerProps?.type === 'date_range';
   const timeParts = DateTimeHelper.getHourByPeriod(time);
   const locale = pickerProps?.language;
+  //Effects
+  useEffect(() => {
+    //Update minutes to nearest minutes in selection
+    time.setMinutes(minutes?.find(it => it >= timeParts?.minutes) ?? 0)
+    setTime(new Date(time))
+  }, [])
 
   //Functions
   const handleDateSelect = (day: DateData) => {
@@ -168,9 +174,11 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           color: colors.earlyDawn,
           textColor: colors.white,
           customContainerStyle: {
-            borderRadius: st(30),
+            borderRadius: st(20),
+            width: st(36),
+            height: st(36),
             backgroundColor: colors.butterCup,
-            marginRight: st(3.2),
+            marginRight: st(isIOS ? 4 : 6.8),
           },
         }
       } else {
@@ -196,7 +204,9 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         color: colors.earlyDawn,
         textColor: colors.white,
         customContainerStyle: {
-          borderRadius: st(30),
+          borderRadius: st(20),
+          width: st(36),
+          height: st(36),
           backgroundColor: colors.butterCup,
         }
       }
@@ -269,12 +279,13 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           />
           <CustomTimeDropdown
             data={minutes}
-            defaultValue={minutes?.find(it => it >= timeParts?.minutes) ?? 0}
+            defaultValue={timeParts?.minutes}
             selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setMinutes(selectedItem);
               setTime(new Date(time));
             }}
+            
           />
           <CustomTimeDropdown
             data={timePeriod}

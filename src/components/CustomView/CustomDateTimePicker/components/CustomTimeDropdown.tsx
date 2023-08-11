@@ -13,16 +13,24 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
 }) => {
 
   const renderTextLabel = (item: string | number, _index: number) => {
+    const valStr = typeof item === 'number' && item < 10
+      ? `0${item}`
+      : item?.toString();
+
     return (
       <Text style={styles.text}>
-        {item?.toString()}
+        {valStr}
       </Text>
     );
   };
   const renderTextItem = (item: string | number, index: number) => {
+    const valStr = typeof item === 'number' && item < 10
+      ? `0${item}`
+      : item?.toString();
+
     return (
       <View style={styles.textItem}>
-        <Text style={[styles.text, styles.opionText]}>{item?.toString()}</Text>
+        <Text style={[styles.text, styles.opionText]}>{valStr}</Text>
       </View>
     );
   };
