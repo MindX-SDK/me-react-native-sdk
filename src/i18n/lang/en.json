@@ -28,5 +28,7 @@
     "dayNamesShort": ["S", "M", "T", "W", "T", "F", "S"]
   },
   "AM": "AM",
-  "PM": "PM"
+  "PM": "PM",
+  "time_AM": "%{time} AM",
+  "time_PM": "%{time} PM"
 }

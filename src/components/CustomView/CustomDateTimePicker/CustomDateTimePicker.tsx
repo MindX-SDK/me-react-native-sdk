@@ -133,10 +133,11 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           ? renderCommonTextGroup(
             translate('selected_time', undefined, locale),
             time
-              ? (
-                (DateTimeHelper.formatDate(time, 'hh:mm ') ?? '') +
-                translate((DateTimeHelper.formatDate(time, 'A') ?? '') as TxKeyPath, undefined, locale)
-              ) ?? '-'
+              ? translate(
+                `time_${DateTimeHelper.formatDate(time, 'A') ?? ''}` as TxKeyPath,
+                {time: (DateTimeHelper.formatDate(time, 'hh:mm ') ?? '')},
+                locale,
+              )
               : '_'
           )
           : isDateRange
