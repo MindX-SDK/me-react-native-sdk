@@ -30,29 +30,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 }}
                 paused={pause}
                 onLoadStart={() => { }}
-                // controls={true}
+            // controls={true}
             />
         );
 
     }, [uri, restProps, pause])
 
     return (
-        <TouchableHighlight 
+        <TouchableHighlight
             onPress={() => {
                 setPaused(prev => !prev);
             }}
         >
             <View style={styles.videoWrapper}>
                 {renderVideo}
-                {pause 
-                ? <SvgPlayButton
-                    style={styles.absoluteCenter}
-                />
-                : undefined}
-                
+                {pause
+                    ? <SvgPlayButton
+                        style={styles.absoluteCenter}
+                    />
+                    : undefined}
+
             </View>
         </TouchableHighlight>
-        
+
     );
 }
 

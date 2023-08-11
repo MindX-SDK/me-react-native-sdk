@@ -6,6 +6,27 @@
   "please_select_a_valid_time": "시간을 선택해 주세요",
   "start_date": "시작일",
   "end_date": "종료일",
-  "please_select_a_valid_date_range": "시작일과 종료일을 모두 선택해 주세요"
-
+  "please_select_a_valid_date_range": "시작일과 종료일을 모두 선택해 주세요",
+  "calendar_format": {
+    "formatAccessibilityLabel": "dddd d '의' MMMM '의' yyyy",
+    "monthNames": [
+      "1월",
+      "2월",
+      "3월",
+      "4월",
+      "5월",
+      "6월",
+      "7월",
+      "8월",
+      "9월",
+      "10월",
+      "11월",
+      "12월"
+    ],
+    "monthNamesShort": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+    "dayNames": ["일", "월", "화", "수", "목", "금", "토"],
+    "dayNamesShort": ["일", "월", "화", "수", "목", "금", "토"]
+  },
+  "AM": "오전",
+  "PM": "오후"
 }

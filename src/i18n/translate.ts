@@ -12,6 +12,6 @@ export function translate(key: TxKeyPath, options?: i18n.TranslateOptions, local
     i18n.locale = locale;
   }
   const result = i18n.t(key, options);
-  return result?.startsWith('[missing') ? key : i18n.t(key, options);
+  return result?.startsWith?.('[missing') ? key : i18n.t(key, options);
 }
 

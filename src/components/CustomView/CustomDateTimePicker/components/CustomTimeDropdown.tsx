@@ -5,11 +5,14 @@ import SelectDropdown, { SelectDropdownProps } from 'react-native-select-dropdow
 import colors from '../../../../utils/theme/colors';
 import { isIOS } from '../../../../utils/constants/constants';
 import images from '../../../../utils/theme/image';
+import { TxKeyPath, translate } from '../../../../i18n';
 
-export type CustomTimeDropdownProps = SelectDropdownProps & {};
+export type CustomTimeDropdownProps = SelectDropdownProps & {
+  locale?: string;
+};
 
 const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
-  buttonStyle, ...restProps
+  buttonStyle, locale, ...restProps
 }) => {
 
   const renderTextLabel = (item: string | number, _index: number) => {
@@ -19,7 +22,7 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
 
     return (
       <Text style={styles.text}>
-        {valStr}
+        {translate(valStr as TxKeyPath, undefined, locale)}
       </Text>
     );
   };
@@ -30,7 +33,9 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
 
     return (
       <View style={styles.textItem}>
-        <Text style={[styles.text, styles.opionText]}>{valStr}</Text>
+        <Text style={[styles.text, styles.opionText]}>
+          {translate(valStr as TxKeyPath, undefined, locale)}
+        </Text>
       </View>
     );
   };

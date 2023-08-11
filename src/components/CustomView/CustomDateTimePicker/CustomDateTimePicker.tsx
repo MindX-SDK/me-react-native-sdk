@@ -6,35 +6,10 @@ import { DateTimeObjects } from '../../../services';
 import Spacer from '../Spacer';
 import { isIOS } from '../../../utils/constants/constants';
 import { Calendar, DateData, LocaleConfig } from 'react-native-calendars';
-import SelectDropdown from 'react-native-select-dropdown';
 import moment from 'moment';
 import CustomTimeDropdown from './components/CustomTimeDropdown';
 import { MarkedDates } from 'react-native-calendars/src/types';
-import { translate } from '../../../i18n';
-
-LocaleConfig.locales['en'] = {
-  formatAccessibilityLabel: "dddd d 'of' MMMM 'of' yyyy",
-  monthNames: [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ],
-  monthNamesShort: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
-  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-  // numbers: ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'] // number localization example
-};
-
-LocaleConfig.defaultLocale = 'en';
+import { TxKeyPath, translate } from '../../../i18n';
 
 export type CustomDateTimePickerProps = ViewProps & {
   pickerProps: DateTimeObjects;
@@ -135,7 +110,14 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         {showPickDate
           ? renderCommonTextGroup(
             translate(isDateRange ? 'start_date' : 'selected_date', undefined, locale),
-            DateTimeHelper.formatDate(date, 'll') ?? '-'
+            date
+              ? DateTimeHelper.formatMindXDatetime(
+                date,
+                undefined,
+                pickerProps,
+                { isDateOnly: true }
+              ) ?? '-'
+              : '-'
           )
           : undefined
         }
@@ -146,12 +128,24 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         {showPickTime
           ? renderCommonTextGroup(
             translate('selected_time', undefined, locale),
-            DateTimeHelper.formatDate(time, 'hh:mm A') ?? '-'
+            time
+              ? (
+                (DateTimeHelper.formatDate(time, 'hh:mm ') ?? '') +
+                translate((DateTimeHelper.formatDate(time, 'A') ?? '') as TxKeyPath, undefined, locale)
+              ) ?? '-'
+              : '_'
           )
           : isDateRange
             ? renderCommonTextGroup(
               translate('end_date', undefined, locale),
-              DateTimeHelper.formatDate(endDate, 'll') ?? '-'
+              endDate
+                ? DateTimeHelper.formatMindXDatetime(
+                  endDate,
+                  undefined,
+                  pickerProps,
+                  { isDateOnly: true }
+                ) ?? '-'
+                : '-'
             )
             : undefined
         }
@@ -160,9 +154,37 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   }
 
   const renderCalendar = () => {
+    //Language
+    const calendarLang = locale ? locale : 'en';
+    if (calendarLang) {
+      LocaleConfig.locales[calendarLang] = translate(
+        'calendar_format',
+        undefined,
+        calendarLang
+      );
+      LocaleConfig.defaultLocale = calendarLang;
+    }
+    //Start/end dates
     const mStart = date ? moment(date) : undefined;
     const mEnd = endDate ? moment(endDate) : undefined;
 
+    //Date selection limit
+    const mToday = moment();
+    const minDate =
+      pickerProps?.['date-limit-type'] === 'future_only'
+        ? DateTimeHelper.formatDate(
+          pickerProps?.['include-current-date'] ? mToday.toDate() : mToday.add(1, 'd').toDate(),
+          'YYYY-MM-DD'
+        )
+        : pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['min-date']
+          ? DateTimeHelper.formatDate(pickerProps?.['min-date'], 'YYYY-MM-DD')
+          : undefined;
+    const maxDate = pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['max-date']
+      ? DateTimeHelper.formatDate(pickerProps?.['max-date'], 'YYYY-MM-DD')
+      : undefined;
+
+
+    //Marking renders
     var markedDates: MarkedDates = {}
     if (mStart) {
       if (isDateRange) {
@@ -194,7 +216,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         }
       }
     }
-
     if (mEnd) {
       markedDates[mEnd.format('YYYY-MM-DD')] = {
         startingDay: false, // mStart?.isSame(mEnd, 'd'),
@@ -211,7 +232,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         }
       }
     }
-
     for (var m = moment(mStart).add(1, 'd'); mEnd && m?.isBefore(mEnd, 'd'); m?.add(1, 'd')) {
       markedDates[m.format('YYYY-MM-DD')] = {
         color: colors.earlyDawn,
@@ -225,6 +245,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
       <View>
         <View style={styles.separator} />
         <Calendar
+          key={`calendar-${locale}`}
           theme={{
             arrowColor: colors.shark,
             textMonthFontWeight: 'bold',
@@ -242,14 +263,8 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           }}
           markedDates={markedDates}
           markingType={isDateRange ? 'period' : 'dot'}
-          minDate={pickerProps?.['min-date']
-            ? DateTimeHelper.formatDate(pickerProps?.['min-date'], 'YYYY-MM-DD')
-            : undefined
-          }
-          maxDate={pickerProps?.['max-date']
-            ? DateTimeHelper.formatDate(pickerProps?.['max-date'], 'YYYY-MM-DD')
-            : undefined
-          }
+          minDate={minDate}
+          maxDate={maxDate}
         />
       </View>
 
@@ -258,6 +273,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 
   const renderTimePicker = () => {
     const isPM = timeParts?.period === 'PM';
+    console.log(timeParts)
     return (
       <View>
         <View style={styles.separator} />
@@ -265,12 +281,13 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         <View style={styles.rowContainer}>
           <CustomTimeDropdown
             data={hours}
+            locale={locale}
             defaultValue={timeParts?.hours}
             selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setHours(isPM && selectedItem !== 12
                 ? selectedItem + 12
-                : selectedItem === 12
+                : !isPM && selectedItem === 12
                   ? 0
                   : selectedItem
               );
@@ -279,21 +296,26 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           />
           <CustomTimeDropdown
             data={minutes}
+            locale={locale}
             defaultValue={timeParts?.minutes}
             selectedRowStyle={styles.selectedRow}
             onSelect={(selectedItem, index) => {
               time.setMinutes(selectedItem);
               setTime(new Date(time));
             }}
-            
+
           />
           <CustomTimeDropdown
             data={timePeriod}
+            locale={locale}
             defaultValue={timeParts?.period}
             onSelect={(selectedItem, index) => {
-              time?.setHours(selectedItem === 'PM' && !isPM
+              console.log(selectedItem, timeParts?.period)
+              time?.setHours(selectedItem === 'PM' && timeParts?.hours !== 12
                 ? timeParts?.hours + 12
-                : timeParts?.hours - 12
+                : selectedItem === 'AM' && timeParts?.hours === 12
+                  ? 0
+                  : timeParts?.hours
               );
               setTime(new Date(time));
             }}

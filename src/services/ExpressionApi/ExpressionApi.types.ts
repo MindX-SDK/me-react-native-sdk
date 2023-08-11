@@ -188,16 +188,18 @@ export interface DateTimeObjects {
     type: DateTimePickerType;
     /**Date/time format showing in UI */
     format: string;
-    /**Has limit or not */
-    "date-limit": boolean;
-    /**Min date if  date-limit is @true */
+    /**Type of limit selection */
+    "date-limit-type": DateLimitType;
+    /**Min date if  date-limit-type is @limited */
     "min-date": string | null | undefined;
-    /**Max date if  date-limit is @true */
+    /**Max date if  date-limit-type is @limited */
     "max-date": string | null | undefined;
     /**Label of confirm button */
     "button-label": string;
+    /**Include current day or not, use for case date-limit-type is @future_only */
+    "include-current-date": boolean | null | undefined;
     /**Language of the option */
-    language: SupportLanguageType
+    language: SupportLanguageType;
 }
 
 export interface AttachmentObjects {
@@ -217,3 +219,5 @@ export type AttachmentType = 'image' | 'video' | 'file' | 'record';
 
 export const SupportLanguages = ['en', 'ko', 'th'] as const;
 export type SupportLanguageType = (typeof SupportLanguages)[number];
+
+export type DateLimitType = 'allow_all' | 'future_only' | 'limited';
