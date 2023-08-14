@@ -7,30 +7,26 @@ import Lightbox, { LightboxProps } from 'react-native-lightbox-v2'
 import CustomArrow from '../CustomView/CustomArrow';
 import colors from '../../utils/theme/colors';
 import { isIOS } from '../../utils/constants/constants';
+import CustomImage from '../CustomView/CustomImage';
 
 export type CustomQuickReplyProps = BubbleProps<CustomIMessage> & {
   onCutomQuickReply?: (btnData: CustomReply, idx?: number) => any;
   // lightboxProps?: LightboxProps;
 }
+const IMAGE_DEFAULT_HEIGHT = vs(112);
 
 const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
   onCutomQuickReply,
   // lightboxProps,
   ...restProps
 }) => {
+  const quickReplies = restProps?.currentMessage?.quickReplies?.values ?? [];
   const renderQuickReplyItem = (itm: CustomReply, idx: number) => {
     return (
       <View key={`quickreply-item-${itm?.title}-${idx}`}>
         {/* {itm?.title !== itm?.value ? <Text style=>{itm?.title}</Text> : undefined} */}
         {itm?.['image-uri'] ? (
-          <Lightbox
-            activeProps={{
-              style: styles.imageActive,
-            }}
-          // {...lightboxProps}
-          >
-            <Image source={{ uri: itm?.['image-uri'] }} style={styles.image} />
-          </Lightbox>
+          <CustomImage uri={itm?.['image-uri']} fixedHeight={IMAGE_DEFAULT_HEIGHT} />
         ) : undefined}
 
         <TouchableOpacity
@@ -56,21 +52,14 @@ const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
           restProps?.position === 'right'
             ? styles.messageTextRight
             : undefined
-          ]}
+        ]}
         >
           {restProps?.currentMessage?.text}
         </Text>
         <View style={styles.separator} />
-        <FlatList
-          horizontal={false}
-          numColumns={2}
-          style={styles.flatList}
-          contentContainerStyle={styles.flatlistContent}
-          data={restProps?.currentMessage?.quickReplies?.values ?? []}
-          renderItem={({ item: it, index: idx }) => {
-            return renderQuickReplyItem(it, idx);
-          }}
-        />
+        <View style={styles.wrapContent}>
+          {quickReplies?.map((it, idx) => renderQuickReplyItem(it, idx))}
+        </View>
       </View>
 
     </CustomArrow>
@@ -82,12 +71,6 @@ export default CustomQuickReply;
 const styles = StyleSheet.create({
   flexGrowOne: {
     flexGrow: 1,
-  },
-  flatList: {
-    flex: 1,
-  },
-  flatlistContent: {
-    justifyContent: 'flex-start',
   },
   bubble: {
     maxWidth: s(251),
@@ -104,6 +87,12 @@ const styles = StyleSheet.create({
     minWidth: s(20),
 
     marginHorizontal: s(2),
+  },
+  wrapContent: {
+    justifyContent: 'flex-start',
+    maxWidth: s(230),
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   button: {
     backgroundColor: colors.mountainMeadow,
@@ -123,7 +112,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     color: colors.shark,
-    fontWeight: isIOS? '600' : 'bold',
+    fontWeight: isIOS ? '600' : 'bold',
     fontSize: st(12),
     lineHeight: st(16),
     letterSpacing: -0.02,
@@ -140,7 +129,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.white,
-    fontWeight: isIOS? '600' : 'bold',
+    fontWeight: isIOS ? '600' : 'bold',
     fontSize: st(12),
     lineHeight: st(16),
     letterSpacing: -0.02,

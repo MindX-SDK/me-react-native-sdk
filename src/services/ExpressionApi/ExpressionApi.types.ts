@@ -129,6 +129,13 @@ export interface TemplateObject {
      * 
      */
     attachments?: AttachmentObjects[];
+
+    /**
+     * Required in case of text or code. String of content.
+     * In case of quick_reply, represent the prompt message.
+     * This field has same behavior as `template`
+     */
+    text?: string;
 }
 
 export interface QuickReplyObjects {
@@ -175,12 +182,12 @@ export interface ButtonObjects {
      * Required if button-type is link. The URL user will be redirected on
      * button press.
      */
-    link: string;
+    link?: string;
     /**
      * Required if button-type is message. The message that will be sent as
      * reply when the button is pressed.
      */
-    message: string;
+    message?: string;
 }
 
 export interface DateTimeObjects {
@@ -188,14 +195,18 @@ export interface DateTimeObjects {
     type: DateTimePickerType;
     /**Date/time format showing in UI */
     format: string;
-    /**Has limit or not */
-    "date-limit": boolean;
-    /**Min date if  date-limit is @true */
+    /**Type of limit selection */
+    "date-limit-type": DateLimitType;
+    /**Min date if  date-limit-type is @limited */
     "min-date": string | null | undefined;
-    /**Max date if  date-limit is @true */
+    /**Max date if  date-limit-type is @limited */
     "max-date": string | null | undefined;
     /**Label of confirm button */
     "button-label": string;
+    /**Include current day or not, use for case date-limit-type is @future_only */
+    "include-current-date": boolean | null | undefined;
+    /**Language of the option */
+    language: SupportLanguageType;
 }
 
 export interface AttachmentObjects {
@@ -212,3 +223,8 @@ export type TemplateType = (typeof TemplateTypes)[number];
 export type ButtonType = 'link' | 'message';
 export type DateTimePickerType = 'date' | 'datetime' | 'time' | 'date_range';
 export type AttachmentType = 'image' | 'video' | 'file' | 'record';
+
+export const SupportLanguages = ['en', 'ko', 'th'] as const;
+export type SupportLanguageType = (typeof SupportLanguages)[number];
+
+export type DateLimitType = 'allow_all' | 'future_only' | 'limited';

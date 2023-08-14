@@ -8,11 +8,13 @@ import { isIOS } from '../../utils/constants/constants';
 import colors from '../../utils/theme/colors';
 import Lightbox, { LightboxProps } from 'react-native-lightbox-v2'
 import Spacer from '../CustomView/Spacer';
+import CustomImage from '../CustomView/CustomImage';
 
 export type CustomCardListProps = BubbleProps<CustomIMessage> & {
     onButtonPress?: (btnData: ButtonObjects, idx?: number) => any;
     // lightboxProps?: LightboxProps;
 }
+const IMAGE_DEFAULT_HEIGHT = vs(112);
 
 const CustomCardList: React.FC<CustomCardListProps> = ({
     onButtonPress,
@@ -20,19 +22,13 @@ const CustomCardList: React.FC<CustomCardListProps> = ({
     ...restProps
 }) => {
 
+
     const renderCardItem = (itm: CardObjects, idx: number) => {
         return (
             <View key={`card-item-${itm?.title}-${idx}`} style={styles.card}>
                 <View style={styles.contentWrapper}>
                     {itm?.['image-url'] ? (
-                        <Lightbox
-                            activeProps={{
-                                style: styles.imageActive,
-                            }}
-                        // {...lightboxProps}
-                        >
-                            <Image source={{ uri: itm?.['image-url'] }} style={styles.image} />
-                        </Lightbox>
+                        <CustomImage uri={itm?.['image-url']} fixedHeight={IMAGE_DEFAULT_HEIGHT}/>
                     ) : undefined}
                     <Spacer height={10} />
                     <Text style={styles.title}>{itm?.title}</Text>

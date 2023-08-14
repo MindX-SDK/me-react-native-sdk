@@ -14,15 +14,25 @@ export const getCurrentTimestamp = (isUTC: boolean = true) => {
     return now.valueOf();
 }
 
-export const formatDate = (date?: Date | string, format?: string) => {
+export const toMoment = (
+    date?: Date | string | null,
+    format?: string
+):  moment.Moment | undefined  => {
     if (!date) {
         return undefined;
     }
-    const mDate: moment.Moment = typeof date === 'string'
-        ? moment(date, 'YYYY/MM/DD') //FIXME: use common format
+    return typeof date === 'string' || format
+        ? moment(date, format ?? 'YYYY/MM/DD') //FIXME: use common format
         : moment(date);
+}
 
-    return mDate.format(format ?? 'LL');
+export const formatDate = (date?: Date | string | null, format?: string) => {
+    if (!date) {
+        return undefined;
+    }
+    const mDate = toMoment(date);
+
+    return mDate?.format(format ?? 'LL');
 }
 
 export const getHourByPeriod = (time: Date) => {
@@ -55,6 +65,34 @@ export const msToHMS = (ms: number) => {
     return timeParts?.join(':');
 }
 
+export const isBetween = (
+    date?: Date | string | null,
+    startDate?: Date | string | null,
+    endDate?: Date | string | null,
+) => {
+    if (!date) {
+        return undefined;
+    }
+    const mDate: moment.Moment = typeof date === 'string'
+        ? moment(date, 'YYYY/MM/DD') //FIXME: use common format
+        : moment(date);
+    const mStart: moment.Moment | undefined =
+        startDate
+            ? typeof startDate === 'string'
+                ? moment(startDate, 'YYYY/MM/DD') //FIXME: use common format
+                : moment(startDate)
+            : undefined;
+    const mEnd: moment.Moment | undefined =
+        endDate
+            ? typeof endDate === 'string'
+                ? moment(endDate, 'YYYY/MM/DD') //FIXME: use common format
+                : moment(endDate)
+            : undefined;
+
+    return (!mStart || mDate.isSameOrAfter(mStart)) &&
+        (!mEnd || mDate.isSameOrBefore(mEnd));
+}
+
 export const formatMindXDatetime = (
     datetime: Date,
     endDate?: Date,
@@ -75,6 +113,7 @@ export const formatMindXDatetime = (
     if (format.includes('오전/오후')) {
         format = format.replace(/오전\/오후/g, 'A[.k]');
     }
+    format = format.replace(/HH:MM/g, format.includes('A') ? 'hh:mm' : 'HH:mm');
 
     if (datetime?.valueOf?.()) {
         let mDateStr = moment(datetime).format(format);

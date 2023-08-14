@@ -1,0 +1,34 @@
+{
+  "selected_date": "Selected Date",
+  "selected_time": "Selected Time",
+  "time": "Time",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "please_select_a_date": "Please select a date",
+  "please_select_a_valid_time": "Please select a valid time",
+  "please_select_a_valid_date_range": "Please select a valid date range",
+  "calendar_format": {
+    "formatAccessibilityLabel": "dddd d 'of' MMMM 'of' yyyy",
+    "monthNames": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "monthNamesShort": ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
+    "dayNames": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "dayNamesShort": ["S", "M", "T", "W", "T", "F", "S"]
+  },
+  "AM": "AM",
+  "PM": "PM",
+  "time_AM": "%{time} AM",
+  "time_PM": "%{time} PM"
+}
