@@ -129,6 +129,13 @@ export interface TemplateObject {
      * 
      */
     attachments?: AttachmentObjects[];
+
+    /**
+     * Required in case of text or code. String of content.
+     * In case of quick_reply, represent the prompt message.
+     * This field has same behavior as `template`
+     */
+    text?: string;
 }
 
 export interface QuickReplyObjects {
@@ -175,12 +182,12 @@ export interface ButtonObjects {
      * Required if button-type is link. The URL user will be redirected on
      * button press.
      */
-    link: string;
+    link?: string;
     /**
      * Required if button-type is message. The message that will be sent as
      * reply when the button is pressed.
      */
-    message: string;
+    message?: string;
 }
 
 export interface DateTimeObjects {

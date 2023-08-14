@@ -14,15 +14,25 @@ export const getCurrentTimestamp = (isUTC: boolean = true) => {
     return now.valueOf();
 }
 
+export const toMoment = (
+    date?: Date | string | null,
+    format?: string
+):  moment.Moment | undefined  => {
+    if (!date) {
+        return undefined;
+    }
+    return typeof date === 'string' || format
+        ? moment(date, format ?? 'YYYY/MM/DD') //FIXME: use common format
+        : moment(date);
+}
+
 export const formatDate = (date?: Date | string | null, format?: string) => {
     if (!date) {
         return undefined;
     }
-    const mDate: moment.Moment = typeof date === 'string'
-        ? moment(date, 'YYYY/MM/DD') //FIXME: use common format
-        : moment(date);
+    const mDate = toMoment(date);
 
-    return mDate.format(format ?? 'LL');
+    return mDate?.format(format ?? 'LL');
 }
 
 export const getHourByPeriod = (time: Date) => {

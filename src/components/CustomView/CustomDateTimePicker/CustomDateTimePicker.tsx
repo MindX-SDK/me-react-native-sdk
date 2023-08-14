@@ -19,13 +19,16 @@ export type CustomDateTimePickerProps = ViewProps & {
 const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   pickerProps, onConfirm, ...restProps
 }) => {
+  const todayMoment = moment();
+  const minDateMoment = DateTimeHelper.toMoment(pickerProps?.['min-date']);
+  const maxDateMoment = DateTimeHelper.toMoment(pickerProps?.['max-date']);
   //States
   const [date, setDate] = useState<Date | undefined>(
     pickerProps?.type === 'date_range' || 
       (pickerProps?.['date-limit-type'] === 'future_only' &&
       !pickerProps?.['include-current-date']) || 
         (pickerProps?.['date-limit-type'] === 'limited' &&
-        !DateTimeHelper.isBetween(new Date(), pickerProps?.['min-date'], pickerProps?.['max-date']))
+        !DateTimeHelper.isBetween(new Date(), minDateMoment?.toDate(), maxDateMoment?.toDate()))
       ? undefined
       : new Date()
   );
@@ -37,6 +40,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   const isDateRange = pickerProps?.type === 'date_range';
   const timeParts = DateTimeHelper.getHourByPeriod(time);
   const locale = pickerProps?.language;
+  
   //Effects
   useEffect(() => {
     //Update minutes to nearest minutes in selection
@@ -175,17 +179,17 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 
     //Date selection limit
     const mToday = moment();
-    const minDate =
+    const minDateStr =
       pickerProps?.['date-limit-type'] === 'future_only'
         ? DateTimeHelper.formatDate(
           pickerProps?.['include-current-date'] ? mToday.toDate() : mToday.add(1, 'd').toDate(),
           'YYYY-MM-DD'
         )
         : pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['min-date']
-          ? DateTimeHelper.formatDate(pickerProps?.['min-date'], 'YYYY-MM-DD')
+          ? minDateMoment?.format('YYYY-MM-DD')
           : undefined;
-    const maxDate = pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['max-date']
-      ? DateTimeHelper.formatDate(pickerProps?.['max-date'], 'YYYY-MM-DD')
+    const maxDateStr = pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['max-date']
+      ? maxDateMoment?.format('YYYY-MM-DD')
       : undefined;
 
 
@@ -261,15 +265,17 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             dayTextColor: colors.black,
             todayTextColor: colors.mountainMeadow,
           }}
-
           initialDate={date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
           onDayPress={day => {
             handleDateSelect(day);
           }}
           markedDates={markedDates}
           markingType={isDateRange ? 'period' : 'dot'}
-          minDate={minDate}
-          maxDate={maxDate}
+          minDate={minDateStr}
+          maxDate={maxDateStr}
+          hideArrows={minDateMoment?.isSame(todayMoment, 'month') &&
+            maxDateMoment?.isSame(todayMoment, 'month')
+          }
         />
       </View>
 

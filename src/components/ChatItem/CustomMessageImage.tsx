@@ -16,7 +16,7 @@ const CustomMessageImage: React.FC<CustomMessageImageProps> = ({
   //States
   const [imageWidth, setImageWidth] = useState(0);
   const [imageheight, setImageHeight] = useState(0);
-  const [isImageFetching, setIsImageFetching] = useState(false);
+  const [isImageFetching, setIsImageFetching] = useState<boolean>();
   //Vars
   const calculatedHeight = (imageheight * IMAGE_DEFAULT_WIDTH / (imageWidth ?? 1));
   //Effects
@@ -53,7 +53,9 @@ const CustomMessageImage: React.FC<CustomMessageImageProps> = ({
         ]}
         imageProps={{
           onLoadStart: () => {
-            setIsImageFetching(true);
+            if (isImageFetching !== false) { // false mean it already loaded
+              setIsImageFetching(true);
+            }
           },
           onLoadEnd: () => {
             setIsImageFetching(false);
@@ -90,5 +92,5 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: st(10),
-  }
+  },
 });

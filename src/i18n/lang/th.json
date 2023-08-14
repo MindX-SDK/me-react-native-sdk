@@ -2,13 +2,13 @@
   "selected_date": "วันที่ที่เลือก",
   "selected_time": "เวลาที่เลือก",
   "time": "เวลา",
-  "please_select_a_date": "วันที่เริ่มต้น",
-  "please_select_a_valid_time": "วันที่สิ้นสุด",
-  "start_date": "โปรดเลือกวันที่",
-  "end_date": "โปรดเลือกเวลาที่ถูกต้อง",
+  "start_date": "วันที่เริ่มต้น",
+  "end_date": "วันที่สิ้นสุด",
+  "please_select_a_date": "โปรดเลือกวันที่",
+  "please_select_a_valid_time": "โปรดเลือกเวลาที่ถูกต้อง ",
   "please_select_a_valid_date_range": "โปรดเลือกช่วงวันที่ที่ถูกต้อง",
   "calendar_format": {
-    "formatAccessibilityLabel": "dddd d '의' MMMM '의' yyyy",
+    "formatAccessibilityLabel": "dddd d 'ของ' MMMM 'ของ' yyyy",
     "monthNames": [
       "มกราคม",
       "กุมภาพันธ์",
@@ -28,8 +28,8 @@
     "dayNames": ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."],
     "dayNamesShort": ["อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส."]
   },
-  "AM": "เช้า",
-  "PM": "เย็น",
+  "AM": "AM",
+  "PM": "PM",
   "time_AM": "%{time} AM",
   "time_PM": "%{time} PM"
 }
