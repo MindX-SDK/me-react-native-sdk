@@ -24,16 +24,18 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   const maxDateMoment = DateTimeHelper.toMoment(pickerProps?.['max-date']);
   //States
   const [date, setDate] = useState<Date | undefined>(
-    pickerProps?.type === 'date_range' || 
-      (pickerProps?.['date-limit-type'] === 'future_only' &&
-      !pickerProps?.['include-current-date']) || 
-        (pickerProps?.['date-limit-type'] === 'limited' &&
-        !DateTimeHelper.isBetween(new Date(), minDateMoment?.toDate(), maxDateMoment?.toDate()))
-      ? undefined
-      : new Date()
+    // pickerProps?.type === 'date_range' || 
+    //   (pickerProps?.['date-limit-type'] === 'future_only' &&
+    //   !pickerProps?.['include-current-date']) || 
+    //     (pickerProps?.['date-limit-type'] === 'limited' &&
+    //     !DateTimeHelper.isBetween(new Date(), minDateMoment?.toDate(), maxDateMoment?.toDate()))
+    //   ? undefined
+    //   : new Date()
   );
   const [endDate, setEndDate] = useState<Date | undefined>();
-  const [time, setTime] = useState<Date>(new Date());
+  const [time, setTime] = useState<Date>(
+    moment().set({hour: 1, minute: 0, second: 0, millisecond: 0}).toDate()
+    );
   //Variables that uses multiple times
   const showPickDate = ['date', 'datetime', 'date_range'].includes(pickerProps?.type);
   const showPickTime = ['datetime', 'time'].includes(pickerProps?.type);
@@ -339,7 +341,9 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
   }
 
   const renderButton = () => {
-    const isDisabled = isDateRange && (!date || !endDate);
+    const isDisabled = isDateRange && (!date || !endDate) ||
+      (showPickDate && !date) ||
+      (showPickTime && !time);
     // || showPickDate && !date || showPickTime && !time //=> never happen since `date` and `time` have initial value
     return (
       <TouchableOpacity
