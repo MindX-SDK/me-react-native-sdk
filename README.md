@@ -19,6 +19,10 @@
     - [Notice!!](#notice!!)
 
   - [Features](#features)
+    - [MindAIExpressionChatUI](#mindAIExpressionChatUI)
+      - [S3 Bucket setup](#s3-bucket-setup)
+      - [Azure Blob Storage setup](#azure-blob-storage-setup)
+      - [Firebase Storage setup](#firebase-storage-setup)
     - [Init API](#init-api)
     - [Start conversation](#start-conversation)
     - [Restart conversation](#restart-conversation)
@@ -27,10 +31,6 @@
     - [Get current Query Id](#get-current-query-id)
     - [Get current timestamp](#get-current-timestamp)
     - [Log events](#log-events)
-    - [MindAIExpressionChatUI](#mindAIExpressionChatUI)
-  - [S3 Bucket setup](#s3-bucket-setup)
-  - [Azure Blob Storage setup](#azure-blob-storage-setup)
-  - [Firebase Storage setup](#firebase-storage-setup)
 
 ## Installation
 ### Step 1
@@ -133,8 +133,101 @@ add following to `app/src/main/AndroidManifest.xml`
 ### Notice!!
   **By default, timestamp send to BE will converted to _UTC_.**
 
+### MindAIExpressionChatUI
+React native component `MindAIExpressionChatUI` handled all above features and S3 Bucket implementation for attachments.
+```javascript
+<MindAIExpressionChatUI
+  ENGINE_URL={ENGINE_URL}
+  AUTH_KEY={AUTH_KEY}
+  showLogCheck={true}
+  remoteStorageConfig={{
+    s3BucketConfig: {
+      bucketName: S3BucketName,
+      options: S3BucketConfig,
+    }
+    // azureBlobStorageConfig: {
+    //   storageName: AZURE_STORAGE_NAME,
+    //   containerName: AZURE_STORAGE_CONTAINER_NAME,
+    //   sasToken: AZURE_SAS_TOKEN_STRING,
+    // }
+    // firebaseStorageConfig: {
+    //   rootDirectory: FIREBASE_STORAGE_ROOT_DIR,
+    //   options: FIREBASE_CONFIG,
+    // }
+  }}
+  test={{
+    mockedMessages: mockData,
+  }}
+/>
+```
+- `ENGINE_URL` - You can get this on the integration page. This is the main URL you will use to access the API’s endpoint
+
+- `AUTH_KEY` - This is the authorization token on the integration page. This token is used to authorize your access to the Mind Expression API.
+
+- `showLogCheck` (optional): Show log area or not
+
+- `remoteStorageConfig`: Config a remote storage for handling Chat media files, you only need to fill one of the config to handle storage: 
+  - `s3BucketConfig`: To config S3 Bucket as chat remote storage, detail: [S3 Bucket setup](#s3-bucket-setup)
+  - `azureBlobStorageConfig`: To config Azure Blob Storage as chat remote storage, detail: [Azure Blob Storage setup](#azure-blob-storage-setup)
+  - `firebaseStorageConfig`: To config Firebase Storage as chat remote storage, detail: [Firebase Storage setup](#firebase-storage-setup)
+
+- `test` (optional): This is for test purpose only
+  - `mockedMessages`: temp message items
+
+
+#### S3 Bucket setup
+This step is required if you want to set up S3 Bucket for uploading Chat media. Please note that this S3 Bucket is not intended for hosting static web pages but rather for uploading files.
+
+To configure the S3 Bucket, follow these steps:
+1. Go to https://s3.console.aws.amazon.com/s3/buckets and create a new S3 Bucket with a name of your choice.
+2. In your project configuration, you will need to provide the following information:
+  - `s3BucketName`: Replace this with the name of your S3 Bucket that you created in step 1.
+  - `s3BucketConfig`: You can customize the AWS SDK configuration by adding additional fields, but the minimum required fields are as follows:
+
+```javascript
+{
+  region: 'THE_REGION', // Replace 'THE_REGION' with the AWS Region of your S3 Bucket (e.g., 'ap-southeast-1').
+  apiVersion: 'latest', // Use 'latest' or a custom date following AWS requirements.
+  credentials: {
+    accessKeyId: 'ACCESS_KEY_ID', // Replace 'ACCESS_KEY_ID' with the Access Key ID from your AWS IAM user credentials (https://console.aws.amazon.com/iamv2/home#/users/create).
+    secretAccessKey: 'SECRET_ACCESS_KEY', // Replace 'SECRET_ACCESS_KEY' with the Secret Access Key from your AWS IAM user credentials (https://console.aws.amazon.com/iamv2/home#/users/create).
+  },
+}
+```
+
+
+#### Azure Blob Storage setup
+This step is required if you want to set up Azure Blob Storage for uploading Chat media. Please note that this Azure Storage is not intended for hosting static web pages or databases but rather for uploading files.
+
+To configure the Azure Blob Storage, follow these steps:
+1. Go to https://portal.azure.com/ and create a new Storage account with a name of your choice.
+2. In your project configuration, you will need to provide the following information:
+
+  - `storageName`: Replace this with the name of your Storage account that you created in step 1.
+
+  - `containerName`: This is the name of the container that will store all Chat upload media. You can create it from your Azure portal, else the SDK will auto-create it.
+
+  - `sasToken`: Azure's Shared Access Signature (SAS) token, which you generated in the Azure portal.
+
+
+#### Firebase Storage setup
+This step is required if you want to set up Firebase Storage for uploading Chat media.
+
+To configure Firebase Storage, follow these steps:
+
+1. Go to https://console.firebase.google.com/ and create a new Firebase project with a name of your choice.
+2. In the Firebase Console Project Settings, create a Web App with a name of your choice, and obtain the `firebaseConfig` object.
+3. In your project configuration, you will need to provide the following information:
+
+  - `rootDirectory`: Replace this with the name of your desired Storage root directory where you want to store chat media files.
+
+  - `options`: This is the Firebase option used to initialize the Firebase App. You can place the `firebaseConfig` object created in step 2 here.
+
+  **Notice: You must, at least, allow read and write access to the rootDirectory to make the upload working.**
+
 ### Init API
 Create an instance of `MindExpressionApi`.
+
 ```javascript
 import {MindExpressionApi} from 'me-react-native-sdk';
 import DeviceInfo from 'react-native-device-info';
@@ -217,91 +310,3 @@ Call `setSession` from `mindExpressionAI` object.
 mindExpressionAPI.setSession();
 ```
 To set x-conversation-id to the request HTTP Header with a return value from the response HTTP Header
-
-### MindAIExpressionChatUI
-React native component `MindAIExpressionChatUI` handled all above features and S3 Bucket implementation for attachments.
-```javascript
-<MindAIExpressionChatUI
-  ENGINE_URL={ENGINE_URL}
-  AUTH_KEY={AUTH_KEY}
-  showLogCheck={true}
-  remoteStorageConfig={{
-    s3BucketConfig: {
-      bucketName: S3BucketName,
-      options: S3BucketConfig,
-    }
-    // azureBlobStorageConfig: {
-    //   storageName: AZURE_STORAGE_NAME,
-    //   containerName: AZURE_STORAGE_CONTAINER_NAME,
-    //   sasToken: AZURE_SAS_TOKEN_STRING,
-    // }
-  }}
-  test={{
-    mockedMessages: mockData,
-  }}
-/>
-```
-- `ENGINE_URL` - You can get this on the integration page. This is the main URL you will use to access the API’s endpoint
-
-- `AUTH_KEY` - This is the authorization token on the integration page. This token is used to authorize your access to the Mind Expression API.
-
-- `showLogCheck` (optional): Show log area or not
-
-- `remoteStorageConfig`: Config a remote storage for handling Chat media files, you only need to fill one of the config to handle storage: 
-  - `s3BucketConfig`: To config S3 Bucket as chat remote storage, detail: [S3 Bucket setup](#s3-bucket-setup)
-  - `azureBlobStorageConfig`: To config Azure Blob Storage as chat remote storage, detail: [Azure Blob Storage setup](#azure-blob-storage-setup)
-  - `firebaseStorageConfig`: To config Firebase Storage as chat remote storage, detail: [Firebase Storage setup](#firebase-storage-setup)
-
-- `test` (optional): This is for test purpose only
-  - `mockedMessages`: temp message items
-
-
-#### S3 Bucket setup
-This step is required if you want to set up S3 Bucket for uploading Chat media. Please note that this S3 Bucket is not intended for hosting static web pages but rather for uploading files.
-
-To configure the S3 Bucket, follow these steps:
-1. Go to https://s3.console.aws.amazon.com/s3/buckets and create a new S3 Bucket with a name of your choice.
-2. In your project configuration, you will need to provide the following information:
-  - `s3BucketName`: Replace this with the name of your S3 Bucket that you created in step 1.
-  - `s3BucketConfig`: You can customize the AWS SDK configuration by adding additional fields, but the minimum required fields are as follows:
-
-```javascript
-{
-  region: 'THE_REGION', // Replace 'THE_REGION' with the AWS Region of your S3 Bucket (e.g., 'ap-southeast-1').
-  apiVersion: 'latest', // Use 'latest' or a custom date following AWS requirements.
-  credentials: {
-    accessKeyId: 'ACCESS_KEY_ID', // Replace 'ACCESS_KEY_ID' with the Access Key ID from your AWS IAM user credentials (https://console.aws.amazon.com/iamv2/home#/users/create).
-    secretAccessKey: 'SECRET_ACCESS_KEY', // Replace 'SECRET_ACCESS_KEY' with the Secret Access Key from your AWS IAM user credentials (https://console.aws.amazon.com/iamv2/home#/users/create).
-  },
-}
-```
-
-
-#### Azure Blob Storage setup
-This step is required if you want to set up Azure Blob Storage for uploading Chat media. Please note that this Azure Storage is not intended for hosting static web pages or databases but rather for uploading files.
-
-To configure the Azure Blob Storage, follow these steps:
-1. Go to https://portal.azure.com/ and create a new Storage account with a name of your choice.
-2. In your project configuration, you will need to provide the following information:
-
-  - `storageName`: Replace this with the name of your Storage account that you created in step 1.
-
-  - `containerName`: This is the name of the container that will store all Chat upload media. You can create it from your Azure portal, else the SDK will auto-create it.
-
-  - `sasToken`: Azure's Shared Access Signature (SAS) token, which you generated in the Azure portal.
-
-
-#### Firebase Storage setup
-This step is required if you want to set up Firebase Storage for uploading Chat media.
-
-To configure Firebase Storage, follow these steps:
-
-1. Go to https://console.firebase.google.com/ and create a new Firebase project with a name of your choice.
-2. In the Firebase Console Project Settings, create a Web App with a name of your choice, and obtain the `firebaseConfig` object.
-3. In your project configuration, you will need to provide the following information:
-
-  - `rootDirectory`: Replace this with the name of your desired Storage root directory where you want to store chat media files.
-
-  - `options`: This is the Firebase option used to initialize the Firebase App. You can place the `firebaseConfig` object created in step 2 here.
-
-  **Notice: You must, at least, allow read and write access to the rootDirectory to make the upload working.**
