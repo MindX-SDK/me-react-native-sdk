@@ -285,12 +285,13 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             textDayHeaderFontWeight: 'bold',
             textDayHeaderFontSize: st(12),
             dayTextColor: colors.black,
-            todayTextColor: colors.mountainMeadow,
+            todayTextColor: colors.black,
           }}
           initialDate={date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
           onDayPress={day => {
             handleDateSelect(day);
           }}
+          monthFormat={locale === 'en' ? 'yyyy.M' : undefined}
           markedDates={markedDates}
           markingType={isDateRange ? 'period' : 'dot'}
           minDate={minDateStr}
