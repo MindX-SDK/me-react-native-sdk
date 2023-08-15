@@ -63,7 +63,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 
     //Case 1: Pick 1 date only
     if (!isDateRange) {
-      if(!date) {
+      if(!date || !mDay?.isSame(mStart)) {
         setDate(new Date(day.timestamp));
       } else {
         setDate(undefined);
@@ -285,7 +285,20 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             textDayHeaderFontWeight: 'bold',
             textDayHeaderFontSize: st(12),
             dayTextColor: colors.black,
-            todayTextColor: colors.black,
+            todayTextColor: colors.black, //FIXME: this will be overrided by below
+            todayButtonFontWeight: 'bold',
+            'stylesheet.day.basic': {
+              todayText: {
+                fontWeight: 'bold',
+                color: colors.black
+              },
+            },
+            'stylesheet.day.period': {
+              todayText: {
+                fontWeight: 'bold',
+                color: colors.black
+              },
+            }
           }}
           initialDate={date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
           onDayPress={day => {
@@ -302,7 +315,6 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         />
         {dateError ? <Text style={styles.errorText}>{dateError}</Text> : undefined}
       </View>
-
     );
   }
 
