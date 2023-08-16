@@ -98,6 +98,7 @@
     "@types/uuid": "^9.0.2",
     "dts-cli": "^2.0.3",
     "husky": "^8.0.3",
+    "metro-react-native-babel-preset": "^0.72.3",
     "react-native": "^0.72.3",
     "release-it": "^16.1.5",
     "size-limit": "^8.2.6",
