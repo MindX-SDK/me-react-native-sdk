@@ -44,7 +44,6 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "peerDependencies": {},
   "engines": {
     "node": ">=12"
   },
@@ -89,6 +88,26 @@
     "timers": "^0.1.1",
     "uuid": "^9.0.0"
   },
+  "peerDependencies": {
+    "expo": ">=46.0.9",
+    "expo-modules-core": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-audio-recorder-player": "*",
+    "react-native-blob-util": "*",
+    "react-native-calendars": "*",
+    "react-native-device-info": "*",
+    "react-native-document-picker": "*",
+    "react-native-get-random-values": "*",
+    "react-native-gifted-chat": "*",
+    "react-native-image-crop-picker": "*",
+    "react-native-pdf": "*",
+    "react-native-select-dropdown": "*",
+    "react-native-svg": "*",
+    "react-native-url-polyfill": "*",
+    "react-native-video": "*",
+    "text-encoding-polyfill": "*"
+  },
   "devDependencies": {
     "@release-it/conventional-changelog": "^7.0.0",
     "@rollup/plugin-url": "^8.0.1",
@@ -101,7 +120,9 @@
     "husky": "^8.0.3",
     "metro-react-native-babel-preset": "^0.72.3",
     "react-native": "^0.72.3",
+    "react-native-builder-bob": "^0.20.0",
     "release-it": "^16.1.5",
+    "rollup-plugin-copy": "^3.4.0",
     "size-limit": "^8.2.6",
     "tslib": "^2.6.0",
     "typescript": "^5.1.6"
