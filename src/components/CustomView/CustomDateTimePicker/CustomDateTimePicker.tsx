@@ -287,12 +287,14 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             dayTextColor: colors.black,
             todayTextColor: colors.black, //FIXME: this will be overrided by below
             todayButtonFontWeight: 'bold',
+            //@ts-ignore
             'stylesheet.day.basic': {
               todayText: {
                 fontWeight: 'bold',
                 color: colors.black
               },
             },
+            //@ts-ignore
             'stylesheet.day.period': {
               todayText: {
                 fontWeight: 'bold',
