@@ -91,6 +91,7 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^7.0.0",
+    "@rollup/plugin-url": "^8.0.1",
     "@size-limit/preset-small-lib": "^8.2.6",
     "@tsconfig/recommended": "^1.0.2",
     "@types/i18n-js": "3.8.4",
