@@ -10,20 +10,15 @@ import {
   View,
 } from 'react-native';
 
-import {
-  MindExpressionApi,
-  GatewayResponse,
-  ConversationData,
-  ButtonObjects,
-  ChatList,
-  CustomReply,
-  DateTimeObjects,
-  DateTimeHelper,
-  MindExpressionApiEvents,
-} from '../../';
+import { CustomReply } from '../../components';
 import DeviceInfo from 'react-native-device-info';
 import RemoteStorageModule from '../../services/RemoteStorage/RemoteStorageModule';
 import { RemoteStorageConfig } from '../../services/RemoteStorage/RemoteStorage.types';
+import { ConversationData, MindExpressionApiEvents } from '../../MindExpressionApi/MindExpressionApi.type';
+import { MindExpressionApi } from '../../MindExpressionApi/MindExpressionApi';
+import { ButtonObjects, DateTimeObjects, GatewayResponse } from '../../services/ExpressionApi/ExpressionApi.types';
+import { DateTimeHelper } from '../../utils';
+import ChatList from '../ChatList/ChatList';
 
 export type MindAIExpressionChatUIProps = {
     /**
@@ -136,7 +131,9 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
   const handleButtonAction = async (btnData: ButtonObjects) => {
     switch (btnData?.['button-type']) {
       case 'link': {
-        Linking.openURL(btnData?.link);
+        if(btnData?.link) {
+          Linking.openURL(btnData?.link);
+        }
         break;
       }
       case 'message': {
