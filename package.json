@@ -10,6 +10,14 @@
     "dist",
     "src"
   ],
+  "repository": "https://github.com/MindX-SDK/me-react-native-sdk",
+  "bugs": {
+    "url": "https://github.com/MindX-SDK/me-react-native-sdk/issues"
+  },
+  "homepage": "https://github.com/MindX-SDK/me-react-native-sdk#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "analyze": "size-limit --why",
     "build": "dts build",
@@ -19,7 +27,8 @@
     "start": "dts watch",
     "test": "dts test",
     "test:watch": "dts test --watch",
-    "test:coverage": "dts test --coverage"
+    "test:coverage": "dts test --coverage",
+    "release": "release-it"
   },
   "husky": {
     "hooks": {
@@ -52,6 +61,7 @@
   "devDependencies": {
     "@azure/core-asynciterator-polyfill": "^1.0.2",
     "@azure/storage-blob": "^12.15.0",
+    "@release-it/conventional-changelog": "^7.0.0",
     "@size-limit/preset-small-lib": "^8.2.6",
     "@tsconfig/recommended": "^1.0.2",
     "@types/i18n-js": "3.8.4",
@@ -90,5 +100,22 @@
     "tslib": "^2.6.0",
     "typescript": "^5.1.6",
     "uuid": "^9.0.0"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
   }
 }
