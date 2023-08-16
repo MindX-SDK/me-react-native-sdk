@@ -1,5 +1,4 @@
 const url = require('@rollup/plugin-url');
-const copy = require('rollup-plugin-copy');
 
 module.exports = {
   rollup(config) {
@@ -22,11 +21,6 @@ module.exports = {
                 '**/*.js',
             ]
         }),
-        copy({
-            targets: [
-              { src: 'src/shim.js', dest: 'dist/' },
-            ]
-        })
     ];
 
     return config;
