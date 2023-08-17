@@ -157,7 +157,7 @@ Add `adjustPan` input mode to your main `<activity`:
 ## Features
 ### Documentation and Examples
   - [The official documentation](https://mindx-docs.mind.ai/)
-  - React Native example [here](https://github.com/MindX-SDK/me-react-native-sdk/tree/main/examples/mindaiexpression-example-reactnative)
+  - React Native example [here](https://github.com/MindX-SDK/me-react-native-sdk/tree/develop/example)
 
 ### Notice!!
   **By default, timestamp send to BE will converted to _UTC_.**
