@@ -37,11 +37,11 @@
 ### Step 1
 Our app depend on some react-native libraries that have native modules, so please add it properly using below commands:
   ```
-  npm install me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
+  npm install me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
   ```
   or 
   ```
-  yarn add me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
+  yarn add me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
   ```
 
 ### Step 2
@@ -157,7 +157,7 @@ Add `adjustPan` input mode to your main `<activity`:
 ## Features
 ### Documentation and Examples
   - [The official documentation](https://mindx-docs.mind.ai/)
-  - React Native example [here](https://github.com/MindX-SDK/me-react-native-sdk/tree/main/examples/mindaiexpression-example-reactnative)
+  - React Native example [here](https://github.com/MindX-SDK/me-react-native-sdk/tree/main/example)
 
 ### Notice!!
   **By default, timestamp send to BE will converted to _UTC_.**
