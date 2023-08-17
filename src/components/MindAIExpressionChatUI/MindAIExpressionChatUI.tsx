@@ -222,8 +222,6 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
           _id: 'User',
         }}
         keyboardShouldPersistTaps={'handled'}
-        // ref={flatlistRef}
-        // style={styles.flatlist}
         onSend={async messages => {
           for (let msg of messages) {
             await converse(msg.text);

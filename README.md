@@ -37,11 +37,11 @@
 ### Step 1
 Our app depend on some react-native libraries that have native modules, so please add it properly using below commands:
   ```
-  npm install me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core
+  npm install me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
   ```
   or 
   ```
-  yarn add me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core
+  yarn add me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
   ```
 
 ### Step 2
@@ -49,6 +49,23 @@ Our app depend on some react-native libraries that have native modules, so pleas
   npx pod-install
   ```
 ### Step 3
+
+#### Setting react-native project
+  ```
+  yarn add -D @babel/plugin-proposal-export-namespace-from
+  ```
+
+  In your babel.config.json file, add this:
+  ```
+  module.exports = {
+  //...
+  plugins: [
+      //...
+      '@babel/plugin-proposal-export-namespace-from', // ADD_THIS
+    ]
+  };
+  ```
+
 #### iOS
 In Xcode open Info.plist and add string key NSPhotoLibraryUsageDescription with value that describes why you need access to user photos. More info here https://forums.developer.apple.com/thread/62229. Depending on what features you use, you also may need NSCameraUsageDescription and NSMicrophoneUsageDescription keys.
 
@@ -119,13 +136,23 @@ android {
 }
 ```
 
-add following to `app/src/main/AndroidManifest.xml`
+In your `app/src/main/AndroidManifest.xml`
+Add following permission:
   - `<uses-permission android:name="android.permission.CAMERA"/>`
   - `<uses-permission android:name="android.permission.RECORD_AUDIO" />`
   - `<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>`
   - `<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />`
   - `<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />`
   - `<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />`
+
+Add `adjustPan` input mode to your main `<activity`:
+  ```
+  <activity
+    ...
+    android:windowSoftInputMode="adjustPan"
+  >
+  ```
+
 
 ## Features
 ### Documentation and Examples
