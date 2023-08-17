@@ -150,7 +150,7 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
                 const uploadResult = await handleUploadAttachment();
 
                 //FIXME: only support 1 attachment for now (uploadResult?.[0])
-                if (Array.isArray(messages)) {
+                if (Array.isArray(messages) && messages) {
                   const idx = messages.findIndex(it => it.text === HAS_ATTACHMENT_FLAG);
 
                   if (idx >= 0) {
@@ -354,6 +354,7 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
           name: fileName ?? '',
         };
       } catch (e) {
+        console.log('image error', e)
         return Promise.reject(e);
       }
     },
