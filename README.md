@@ -33,6 +33,7 @@
     - [Log events](#log-events)
 
 ## Installation
+**NOTICE: PLEASE USE NODE VERSION >=18**
 ### Step 1
 Our app depend on some react-native libraries that have native modules, so please add it properly using below commands:
   ```
