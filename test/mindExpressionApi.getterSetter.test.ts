@@ -11,15 +11,14 @@ describe('Check API color Logs', () => {
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
       '2J2bTvbBRku_VUEiKT3KgA',
       undefined,
-      {useLogger: true}
+      { useLogger: true }
     );
 
-    const greeting = await mindaiExpressionApi?.greeting();
+    await mindaiExpressionApi?.greeting();
 
     const logs = mindaiExpressionApi?.getLogs();
     expect(logs?.length).not.toEqual(undefined);
     expect(logs?.length).not.toEqual(0);
-
   });
 });
 
@@ -27,17 +26,16 @@ describe('Check API color Logs error', () => {
   it('Logs not working', async () => {
     const mindaiExpressionApi: MindExpressionApi = new MindExpressionApi(
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
-      '2J2bTvbBRku_VUEiKT3KgA',
+      '2J2bTvbBRku_VUEiKT3KgA'
     );
 
-    const greeting = await mindaiExpressionApi?.greeting();
+    await mindaiExpressionApi?.greeting();
 
     try {
-      const logs = mindaiExpressionApi?.getLogs();
+      mindaiExpressionApi?.getLogs();
     } catch (e) {
       expect(e).toMatchObject(new LoggerNotExistError());
     }
-
   });
 });
 
@@ -50,17 +48,16 @@ describe('Check API color resetSession', () => {
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
       '2J2bTvbBRku_VUEiKT3KgA',
       undefined,
-      {useLogger: true}
+      { useLogger: true }
     );
 
-    const greeting = await mindaiExpressionApi?.greeting();
+    await mindaiExpressionApi?.greeting();
 
     mindaiExpressionApi?.resetSession();
     expect(mindaiExpressionApi?.getSession()).toBe(null);
     const hiRes = await mindaiExpressionApi?.converse('Hi');
     expect(hiRes.code).toBe(1000);
     expect(hiRes.description).toBe('Conversation not started');
-
   });
 });
 
@@ -73,7 +70,7 @@ describe('Check API color setSession', () => {
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
       '2J2bTvbBRku_VUEiKT3KgA',
       undefined,
-      {useLogger: true}
+      { useLogger: true }
     );
 
     const conversationId = initUUID();
@@ -92,14 +89,13 @@ describe('Check API color getQueryId', () => {
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
       '2J2bTvbBRku_VUEiKT3KgA',
       undefined,
-      {useLogger: true}
+      { useLogger: true }
     );
 
     expect(mindaiExpressionApi?.getQueryId()).toBe(undefined);
-    const greeting = await mindaiExpressionApi?.greeting();
+    await mindaiExpressionApi?.greeting();
     expect(mindaiExpressionApi?.getQueryId()).not.toBe(undefined);
     expect(mindaiExpressionApi?.getQueryId()?.length).toBeGreaterThan(0);
-
   });
 });
 
@@ -112,13 +108,12 @@ describe('Check API color getTimestamp', () => {
       'https://me-dev.mind.ai/api/v1/gateway/default/Zyv6zF5sS_Gl9XE4-PX3Tg/V9xW5DtdQay5cIaCZ6sxKw',
       '2J2bTvbBRku_VUEiKT3KgA',
       undefined,
-      {useLogger: true}
+      { useLogger: true }
     );
 
     expect(mindaiExpressionApi?.getTimestamp()).toBe(undefined);
-    const greeting = await mindaiExpressionApi?.greeting();
+    await mindaiExpressionApi?.greeting();
     expect(mindaiExpressionApi?.getTimestamp()).not.toBe(undefined);
     expect(mindaiExpressionApi?.getTimestamp()).toBeGreaterThan(0);
-
   });
 });

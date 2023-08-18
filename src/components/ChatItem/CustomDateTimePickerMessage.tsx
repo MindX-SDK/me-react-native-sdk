@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { BubbleProps } from 'react-native-gifted-chat';
-import { CustomIMessage, CustomReply, DateTimeObjects } from '../..';
+import { CustomIMessage, DateTimeObjects } from '../..';
 import { s, st, vs } from '../../utils';
 import CustomArrow from '../CustomView/CustomArrow';
 import colors from '../../utils/theme/colors';
@@ -11,14 +11,11 @@ import CustomDateTimePicker from '../CustomView/CustomDateTimePicker/CustomDateT
 export type CustomDateTimePickerMessageProps = BubbleProps<CustomIMessage> & {
   pickerProps: DateTimeObjects;
   onConfirm?: (dateTime: Date, endDate?: Date) => any;
-}
+};
 
-const CustomDateTimePickerMessage: React.FC<CustomDateTimePickerMessageProps> = ({
-  pickerProps,
-  onConfirm,
-  ...restProps
-}) => {
-
+const CustomDateTimePickerMessage: React.FC<
+  CustomDateTimePickerMessageProps
+> = ({ pickerProps, onConfirm, ...restProps }) => {
   return (
     <CustomArrow
       position={restProps?.position}
@@ -26,25 +23,22 @@ const CustomDateTimePickerMessage: React.FC<CustomDateTimePickerMessageProps> = 
       borderWidth={1}
     >
       <View style={styles.bubble}>
-        <Text style={[
-          styles.messageText,
-          restProps?.position === 'right'
-            ? styles.messageTextRight
-            : undefined
+        <Text
+          style={[
+            styles.messageText,
+            restProps?.position === 'right'
+              ? styles.messageTextRight
+              : undefined,
           ]}
         >
           {restProps?.currentMessage?.text}
         </Text>
         <View style={styles.separator} />
-        <CustomDateTimePicker 
-          pickerProps={pickerProps}
-          onConfirm={onConfirm}
-        />
+        <CustomDateTimePicker pickerProps={pickerProps} onConfirm={onConfirm} />
       </View>
-
     </CustomArrow>
   );
-}
+};
 
 export default CustomDateTimePickerMessage;
 
@@ -92,7 +86,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     color: colors.shark,
-    fontWeight: isIOS? '600' : 'bold',
+    fontWeight: isIOS ? '600' : 'bold',
     fontSize: st(12),
     lineHeight: st(16),
     letterSpacing: -0.02,
@@ -109,7 +103,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.white,
-    fontWeight: isIOS? '600' : 'bold',
+    fontWeight: isIOS ? '600' : 'bold',
     fontSize: st(12),
     lineHeight: st(16),
     letterSpacing: -0.02,

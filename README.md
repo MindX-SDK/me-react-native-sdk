@@ -47,7 +47,7 @@ Our app depend on some react-native libraries that have native modules, so pleas
 ### Step 2 installl CocoaPods packages
 Trigger command:
   ```
-  cd ios & pod install
+  cd ios && pod install
   ```
 ### Step 3: Setting project
 

@@ -4,11 +4,9 @@ import { Avatar, AvatarProps } from 'react-native-gifted-chat';
 import { CustomIMessage } from '../../';
 import { st } from '../../utils';
 
-export type CustomAvatarProps = AvatarProps<CustomIMessage> & {}
+export type CustomAvatarProps = AvatarProps<CustomIMessage> & {};
 
-const CustomAvatar: React.FC<CustomAvatarProps> = ({
-  ...restProps
-}) => {
+const CustomAvatar: React.FC<CustomAvatarProps> = ({ ...restProps }) => {
   return (
     <Avatar
       {...restProps}
@@ -18,7 +16,7 @@ const CustomAvatar: React.FC<CustomAvatarProps> = ({
       }}
     />
   );
-}
+};
 
 export default CustomAvatar;
 
@@ -30,5 +28,5 @@ const styles = StyleSheet.create({
   userAvatar: {
     width: 0,
     height: 0,
-  }
+  },
 });

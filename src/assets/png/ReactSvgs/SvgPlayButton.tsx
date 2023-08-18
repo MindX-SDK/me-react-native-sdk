@@ -1,18 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// import { StyleSheet } from 'react-native';
 import Svg, { Path, Rect, SvgProps } from 'react-native-svg';
-import { s, st, vs } from '../../../utils/scaler';
-import { isIOS } from '../../../utils/constants/constants';
-import colors from '../../../utils/theme/colors';
+import { s } from '../../../utils/scaler';
 
-export type SvgPlayButtonProps = SvgProps & {
-  fileExtensions?: string;
-};
+export type SvgPlayButtonProps = SvgProps & {};
 
-function SvgPlayButton({
-  fileExtensions = '',
-  ...restProps
-}: SvgPlayButtonProps) {
+function SvgPlayButton({ ...restProps }: SvgPlayButtonProps) {
   return (
     <Svg
       width={s(47)}
@@ -33,4 +26,4 @@ function SvgPlayButton({
 
 export default SvgPlayButton;
 
-const styles = StyleSheet.create({});
+// const styles = StyleSheet.create({});

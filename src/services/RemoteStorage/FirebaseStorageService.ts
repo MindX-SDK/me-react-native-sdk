@@ -1,9 +1,14 @@
-import { FileHelper } from "../../utils";
-import { RemoteStorageService } from "./RemoteStorageService";
-import { FirebaseStorageConfigProps } from "./RemoteStorage.types";
-import { FirebaseApp, initializeApp } from "firebase/app";
-import { getStorage, ref, FirebaseStorage, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-
+import { FileHelper } from '../../utils';
+import { RemoteStorageService } from './RemoteStorageService';
+import { FirebaseStorageConfigProps } from './RemoteStorage.types';
+import { FirebaseApp, initializeApp } from 'firebase/app';
+import {
+  getStorage,
+  ref,
+  FirebaseStorage,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 
 export class FirebaseStorageService extends RemoteStorageService {
   private app: FirebaseApp;
@@ -16,7 +21,10 @@ export class FirebaseStorageService extends RemoteStorageService {
     this.rootPath = this.buildRootPath(config.rootDirectory);
   }
 
-  uploadFile = async (path: string, uploadFileName: string): Promise<string> => {
+  uploadFile = async (
+    path: string,
+    uploadFileName: string
+  ): Promise<string> => {
     try {
       const blob = await FileHelper.uriToBlob(path);
 
@@ -32,7 +40,7 @@ export class FirebaseStorageService extends RemoteStorageService {
       console.log(e);
       return '';
     }
-  }
+  };
 
   ///Private functions
   private buildRootPath = (name: string) => {
@@ -50,9 +58,9 @@ export class FirebaseStorageService extends RemoteStorageService {
     }
 
     return name;
-  }
+  };
 
   private buildFilePath = (fileName: string) => {
     return `${this.rootPath}${fileName}`;
-  }
+  };
 }

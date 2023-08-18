@@ -1,10 +1,31 @@
 import React, { useState } from 'react';
-import { Image, Keyboard, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Composer, IMessage, InputToolbar, InputToolbarProps, Send } from 'react-native-gifted-chat';
-import ImagePicker, { Image as PickerImageProps} from 'react-native-image-crop-picker';
+import {
+  Image,
+  Keyboard,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
+  Composer,
+  IMessage,
+  InputToolbar,
+  InputToolbarProps,
+  Send,
+} from 'react-native-gifted-chat';
+import ImagePicker, {
+  Image as PickerImageProps,
+} from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
-import { CustomIMessage, ToolBarCustomOptionProps, UploadFileProps } from '../../..';
-import { FileHelper, StringHelper, UuidHelper, s, st, vs } from '../../../utils';
+import {
+  CustomIMessage,
+  ToolBarCustomOptionProps,
+  UploadFileProps,
+} from '../../..';
+import { StringHelper, UuidHelper, s, st, vs } from '../../../utils';
 import images from '../../../utils/theme/image';
 import colors from '../../../utils/theme/colors';
 import { isIOS } from '../../../utils/constants/constants';
@@ -14,25 +35,31 @@ import RecorderPlayerResponsiveView from '../../CustomView/RecorderPlayer/Record
 import RecorderPlayerResponsiveManager from '../../CustomView/RecorderPlayer/RecorderPlayerResponsiveManager';
 import RemoteStorageModule from '../../../services/RemoteStorage/RemoteStorageModule';
 
-
 export type CustomInputToolbarProps = InputToolbarProps<CustomIMessage> & {
   toolbarCustomOptions?: ToolBarCustomOptionProps[];
   allowMultiAttachments?: boolean;
-  onAddAttachment?: (attachment: UploadFileProps, actionProps: ToolBarCustomOptionProps) => any;
+  onAddAttachment?: (
+    attachment: UploadFileProps,
+    actionProps: ToolBarCustomOptionProps
+  ) => any;
   onRemoveAttachment?: (attachment: UploadFileProps) => any;
-}
+};
 
 const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
   toolbarCustomOptions = DEFAULT_TOOLBAR_OPTIONS,
   allowMultiAttachments,
   onAddAttachment,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onRemoveAttachment,
   ...restProps
 }) => {
   const [showActions, setShowActions] = useState(false);
   const [attachments, setAttachments] = useState<UploadFileProps[]>([]);
 
-  const handleAddAttachment = (attachment: UploadFileProps, actionProps: ToolBarCustomOptionProps) => {
+  const handleAddAttachment = (
+    attachment: UploadFileProps,
+    actionProps: ToolBarCustomOptionProps
+  ) => {
     if (allowMultiAttachments) {
       attachments.push(attachment);
       setAttachments(attachments);
@@ -40,17 +67,17 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
       setAttachments([attachment]);
     }
     onAddAttachment?.(attachment, actionProps);
-  }
+  };
 
   const handleUploadAttachment = async (): Promise<string[]> => {
-    const uploadResult: string[] = []
+    const uploadResult: string[] = [];
     for (let att of attachments) {
       try {
         const result = await RemoteStorageModule.uploadFile(
           att.uri,
           `${UuidHelper.initUUID()}_${Date.now()}_${att.name}`
         );
-        
+
         console.log(result);
         uploadResult.push(result);
       } catch (e) {
@@ -60,7 +87,7 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
     setAttachments([]);
 
     return uploadResult;
-  }
+  };
 
   const renderActionItem = (it: ToolBarCustomOptionProps, idx: number) => {
     return (
@@ -68,11 +95,10 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
         key={`action-item-${it?.label}-${idx}`}
         style={[
           styles.actionItem,
+          // eslint-disable-next-line react-native/no-inline-styles
           {
-            marginRight: idx === toolbarCustomOptions?.length - 1 
-              ? 0
-              : 30,
-          }
+            marginRight: idx === toolbarCustomOptions?.length - 1 ? 0 : 30,
+          },
         ]}
         onPress={async () => {
           setShowActions(false);
@@ -83,18 +109,21 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
           console.log(result);
           if (result) {
             handleAddAttachment(result, it);
-          }          
+          }
         }}
       >
-        {it?.image 
-          ? <Image source={it?.image} resizeMode={'contain'} style={styles.actionImage}/> 
-          : undefined
-        }
+        {it?.image ? (
+          <Image
+            source={it?.image}
+            resizeMode={'contain'}
+            style={styles.actionImage}
+          />
+        ) : undefined}
         <Spacer height={8} />
         <Text style={styles.actionText}>{it?.label}</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   const renderActionsBar = () => {
     return (
@@ -106,20 +135,20 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
         {toolbarCustomOptions?.map((it, idx) => renderActionItem(it, idx))}
       </ScrollView>
     );
-  }
+  };
 
   const renderActionButton = () => {
     return (
       <TouchableOpacity
         style={styles.actionWrapper}
         onPress={() => {
-          setShowActions(prev => !prev);
+          setShowActions((prev) => !prev);
         }}
       >
         <Text style={[styles.iconText]}>+</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   const renderInputToolbar = () => {
     return (
@@ -133,12 +162,13 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
         //     />
         //   );
         // }}
-        renderSend={sendProps => (
+        renderSend={(sendProps) => (
           <Send
             {...sendProps}
             containerStyle={styles.sendButton}
             alwaysShowSend={!!attachments?.length}
-            text={sendProps?.text ||
+            text={
+              sendProps?.text ||
               (attachments?.length ? HAS_ATTACHMENT_FLAG : undefined)
             }
             onSend={async (messages, shouldResetInputToolbar) => {
@@ -151,10 +181,13 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
 
                 //FIXME: only support 1 attachment for now (uploadResult?.[0])
                 if (Array.isArray(messages) && messages) {
-                  const idx = messages.findIndex(it => it.text === HAS_ATTACHMENT_FLAG);
+                  const idx = messages.findIndex(
+                    (it) => it.text === HAS_ATTACHMENT_FLAG
+                  );
 
                   if (idx >= 0) {
                     formattedMsgs = messages;
+                    //@ts-ignore
                     formattedMsgs[idx].text = uploadResult?.[0];
                   }
                 } else {
@@ -173,50 +206,45 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
             />
           </Send>
         )}
-        renderComposer={composerProps => (
-          <Composer
-            {...composerProps}
-            textInputStyle={styles.inputText}
-          />
+        renderComposer={(composerProps) => (
+          <Composer {...composerProps} textInputStyle={styles.inputText} />
         )}
       />
     );
-  }
+  };
 
   const renderAttachment = () => {
     if (attachments?.length) {
       //FIXME: dummy UI
       return (
         <AttachmentPreview
-          style={styles.attachments} 
+          style={styles.attachments}
           attachments={attachments}
           onClose={() => {
             setAttachments([]);
           }}
-          onRemove={(itm, idx) => {
-            const newAtts = [...attachments]
-              .filter(it => it?.uri !== itm?.uri);
+          onRemove={(itm, _idx) => {
+            const newAtts = [...attachments].filter(
+              (it) => it?.uri !== itm?.uri
+            );
             setAttachments(newAtts);
           }}
         />
-      )
+      );
     }
     return undefined;
-  }
+  };
 
   return (
     <Pressable
       style={styles.container}
       onPress={() => {
-        Keyboard.dismiss()
+        Keyboard.dismiss();
       }}
     >
       <View>
         {renderAttachment()}
-        {showActions
-          ? renderActionsBar()
-          : undefined
-        }
+        {showActions ? renderActionsBar() : undefined}
       </View>
       <View style={styles.inputRow}>
         {renderActionButton()}
@@ -227,7 +255,7 @@ const CustomInputToolbar: React.FC<CustomInputToolbarProps> = ({
       </View>
     </Pressable>
   );
-}
+};
 
 export default CustomInputToolbar;
 
@@ -265,7 +293,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: vs(15)
+    paddingVertical: vs(15),
   },
   actionItem: {
     justifyContent: 'center',
@@ -329,11 +357,11 @@ const styles = StyleSheet.create({
   },
   inputText: {
     color: colors.shark,
-    fontWeight: isIOS? '600' : 'bold',
+    fontWeight: isIOS ? '600' : 'bold',
     fontSize: st(12),
     textAlign: 'left',
     textAlignVertical: 'center',
-  }
+  },
 });
 
 const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
@@ -346,7 +374,9 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
           cropping: false,
           mediaType: 'photo',
         });
-        let fileName = isIOS ? image.filename : StringHelper.getFileName(image.path);
+        let fileName = isIOS
+          ? image.filename
+          : StringHelper.getFileName(image.path);
         // const imageBase64 = `data:${image.mime};base64,${image?.data}`;
         return {
           uri: image.path,
@@ -354,7 +384,7 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
           name: fileName ?? '',
         };
       } catch (e) {
-        console.log('image error', e)
+        console.log('image error', e);
         return Promise.reject(e);
       }
     },
@@ -367,8 +397,8 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
         const pickerResult = await DocumentPicker.pickSingle({
           presentationStyle: 'fullScreen',
           copyTo: 'cachesDirectory',
-        })
-  
+        });
+
         return {
           uri: pickerResult?.fileCopyUri ?? '',
           type: pickerResult?.type ?? '',
@@ -387,7 +417,9 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
         const video = await ImagePicker.openPicker({
           mediaType: 'video',
         });
-        let fileName = isIOS ? video.filename : StringHelper.getFileName(video.path);
+        let fileName = isIOS
+          ? video.filename
+          : StringHelper.getFileName(video.path);
         return {
           uri: video.path,
           type: video.mime,
@@ -403,14 +435,15 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
     image: images.ic_pick_record,
     onPress: async () => {
       try {
-        const recordResult: string = await RecorderPlayerResponsiveManager.showPopupAsync({
-          type: 'record',
-          positionAt: {
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }
-        })
+        const recordResult: string =
+          await RecorderPlayerResponsiveManager.showPopupAsync({
+            type: 'record',
+            positionAt: {
+              left: 0,
+              right: 0,
+              bottom: 0,
+            },
+          });
         console.log(recordResult);
         return {
           uri: recordResult,
@@ -429,4 +462,5 @@ const DEFAULT_TOOLBAR_OPTIONS: ToolBarCustomOptionProps[] = [
  * Just a unique flag to use in text to trigger `onSend`,
  * since `onSend` function only triggered when text is not empty
  */
-const HAS_ATTACHMENT_FLAG = 'HAS_ATTACHMENT_FLAG_36c3c4a9-811d-50ef-9605-894619b2081d';
+const HAS_ATTACHMENT_FLAG =
+  'HAS_ATTACHMENT_FLAG_36c3c4a9-811d-50ef-9605-894619b2081d';

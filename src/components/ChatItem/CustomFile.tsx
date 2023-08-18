@@ -9,15 +9,13 @@ import { isIOS } from '../../utils/constants/constants';
 import Spacer from '../CustomView/Spacer';
 import queryString from 'query-string';
 
-export type CustomFileProps = BubbleProps<CustomIMessage> & {}
+export type CustomFileProps = BubbleProps<CustomIMessage> & {};
 
-const CustomFile: React.FC<CustomFileProps> = ({
-  ...restProps
-}) => {
+const CustomFile: React.FC<CustomFileProps> = ({ ...restProps }) => {
   //States
   const [fileSize, setFileSize] = useState('calculating...');
   //Vars that used multi times
-  const {position, currentMessage, wrapperStyle} = restProps;
+  const { position, currentMessage } = restProps;
   //use queryString is to prevent Url with queries
   const pathReader = queryString.parseUrl(currentMessage?.file ?? '');
   const filename = StringHelper.getFileName(pathReader?.url ?? '');
@@ -28,12 +26,12 @@ const CustomFile: React.FC<CustomFileProps> = ({
     if (currentMessage?.file?.toLowerCase()?.startsWith('http')) {
       fetchFileSize(currentMessage?.file);
     }
-  }, [currentMessage])
+  }, [currentMessage]);
 
   const fetchFileSize = async (path: string) => {
     const blob = await FileHelper.uriToBlob(path);
     setFileSize(StringHelper.getFileSize(blob.size));
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,7 +41,7 @@ const CustomFile: React.FC<CustomFileProps> = ({
         <Text
           style={[
             styles.fileName,
-            {color: isLeft ? colors.shark : colors.white,}
+            { color: isLeft ? colors.shark : colors.white },
           ]}
           numberOfLines={1}
           ellipsizeMode={'middle'}
@@ -53,7 +51,7 @@ const CustomFile: React.FC<CustomFileProps> = ({
         <Text
           style={[
             styles.fileSize,
-            {color: isLeft ? colors.grayChateau : colors.white,}
+            { color: isLeft ? colors.grayChateau : colors.white },
           ]}
           numberOfLines={1}
           ellipsizeMode={'middle'}
@@ -64,7 +62,7 @@ const CustomFile: React.FC<CustomFileProps> = ({
       <Spacer width={40} />
     </View>
   );
-}
+};
 
 export default CustomFile;
 
@@ -82,7 +80,6 @@ const styles = StyleSheet.create({
     fontSize: st(12),
     lineHeight: st(16),
     letterSpacing: -0.02,
-
   },
   fileSize: {
     color: colors.grayChateau,

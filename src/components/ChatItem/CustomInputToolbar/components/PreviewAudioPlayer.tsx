@@ -5,7 +5,9 @@ import Spacer from '../../../CustomView/Spacer';
 import images from '../../../../utils/theme/image';
 import colors from '../../../../utils/theme/colors';
 import { isIOS } from '../../../../utils/constants/constants';
-import AudioRecorderPlayer, { PlayBackType } from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer, {
+  PlayBackType,
+} from 'react-native-audio-recorder-player';
 
 export type PreviewAudioPlayerProps = {
   audioPath: string;
@@ -56,7 +58,6 @@ const PreviewAudioPlayer: React.FC<PreviewAudioPlayerProps> = ({
     setIsPlaying(false);
   };
 
-
   return (
     <>
       <View style={styles.rowContainer}>
@@ -73,7 +74,11 @@ const PreviewAudioPlayer: React.FC<PreviewAudioPlayerProps> = ({
             onRemove?.();
           }}
         >
-          <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+          <Image
+            source={images.ic_trash_bin}
+            resizeMode={'contain'}
+            style={styles.imageTrashBtn}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -90,20 +95,21 @@ const PreviewAudioPlayer: React.FC<PreviewAudioPlayerProps> = ({
             style={styles.imageRecordButton}
           />
         </TouchableOpacity>
-        {extraButtonUI
-          ? <TouchableOpacity
+        {extraButtonUI ? (
+          <TouchableOpacity
             onPress={() => {
               onExtraButtonPress?.();
             }}
           >
             {extraButtonUI}
           </TouchableOpacity>
-          : <Spacer width={20} />
-        }
+        ) : (
+          <Spacer width={20} />
+        )}
       </View>
     </>
   );
-}
+};
 
 export default PreviewAudioPlayer;
 

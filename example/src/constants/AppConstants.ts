@@ -1,6 +1,5 @@
 /// CHAT API */
-export const ENGINE_URL =
-  'REPLACE_ME';
+export const ENGINE_URL = 'REPLACE_ME';
 export const AUTH_KEY = 'REPLACE_ME';
 
 /// S3 BUCKET */
@@ -15,11 +14,9 @@ export const S3_BUCKET_CONFIG = {
 };
 
 /// AZURE BLOB STORAGE */
-export const AZURE_SAS_TOKEN_STRING =
-  'REPLACE_ME';
+export const AZURE_SAS_TOKEN_STRING = 'REPLACE_ME';
 export const AZURE_STORAGE_NAME = 'REPLACE_ME';
-export const AZURE_STORAGE_CONTAINER_NAME =
-  'REPLACE_ME';
+export const AZURE_STORAGE_CONTAINER_NAME = 'REPLACE_ME';
 
 /// FIREBASE STORAGE */
 export const FIREBASE_STORAGE_ROOT_DIR = 'REPLACE_ME';

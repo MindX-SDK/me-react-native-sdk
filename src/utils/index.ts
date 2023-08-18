@@ -6,6 +6,4 @@ export * as FileHelper from './helpers/FileHelper';
 export * as StringHelper from './helpers/StringHelper';
 export * as UuidHelper from './helpers/UuidHelper';
 export * from './scaler';
-export {
-    DataConverter
-}
+export { DataConverter };

@@ -1,5 +1,5 @@
-import {Dimensions} from 'react-native';
-const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+import { Dimensions } from 'react-native';
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const guidelineBaseWidth = 390;
 const guidelineBaseHeight = 844;
@@ -22,5 +22,5 @@ export {
   scaleText,
   moderateScale,
   screenWidth,
-  screenHeight
+  screenHeight,
 };

@@ -16,7 +16,7 @@ export const colors = {
   cornflowerBlue: '#CBD1D7',
   nobel: '#B6B6B6',
   concrete: '#F2F2F2',
-  redOrange: '#FF3535'
+  redOrange: '#FF3535',
 };
 
 export default colors;

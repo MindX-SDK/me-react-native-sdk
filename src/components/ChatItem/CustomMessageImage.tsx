@@ -5,7 +5,7 @@ import { CustomIMessage } from '../../';
 import { s, st, vs } from '../../utils';
 import colors from '../../utils/theme/colors';
 
-export type CustomMessageImageProps = MessageImageProps<CustomIMessage> & {}
+export type CustomMessageImageProps = MessageImageProps<CustomIMessage> & {};
 
 const IMAGE_DEFAULT_WIDTH = s(260);
 const IMAGE_DEFAULT_HEIGHT = vs(150);
@@ -18,27 +18,32 @@ const CustomMessageImage: React.FC<CustomMessageImageProps> = ({
   const [imageheight, setImageHeight] = useState(0);
   const [isImageFetching, setIsImageFetching] = useState<boolean>();
   //Vars
-  const calculatedHeight = (imageheight * IMAGE_DEFAULT_WIDTH / (imageWidth ?? 1));
+  const calculatedHeight =
+    (imageheight * IMAGE_DEFAULT_WIDTH) / (imageWidth ?? 1);
   //Effects
   useEffect(() => {
     getSize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restProps?.currentMessage]);
 
   const getSize = async () => {
     const uri = restProps?.currentMessage?.image;
     if (uri) {
-      Image.getSize(uri, (width, height) => {
-        // console.log(width, height);
-        setImageWidth(isNaN(width) ? IMAGE_DEFAULT_WIDTH : width);
-        setImageHeight(isNaN(height) ? IMAGE_DEFAULT_HEIGHT : height);
-      },
+      Image.getSize(
+        uri,
+        (width, height) => {
+          // console.log(width, height);
+          setImageWidth(isNaN(width) ? IMAGE_DEFAULT_WIDTH : width);
+          setImageHeight(isNaN(height) ? IMAGE_DEFAULT_HEIGHT : height);
+        },
         (e) => {
           console.log(e);
           setImageWidth(IMAGE_DEFAULT_WIDTH);
           setImageHeight(IMAGE_DEFAULT_HEIGHT);
-        })
+        }
+      );
     }
-  }
+  };
 
   return (
     <View>
@@ -49,11 +54,12 @@ const CustomMessageImage: React.FC<CustomMessageImageProps> = ({
           {
             width: IMAGE_DEFAULT_WIDTH,
             height: calculatedHeight ? calculatedHeight : IMAGE_DEFAULT_HEIGHT,
-          }
+          },
         ]}
         imageProps={{
           onLoadStart: () => {
-            if (isImageFetching !== false) { // false mean it already loaded
+            if (isImageFetching !== false) {
+              // false mean it already loaded
               setIsImageFetching(true);
             }
           },
@@ -63,16 +69,15 @@ const CustomMessageImage: React.FC<CustomMessageImageProps> = ({
         }}
         containerStyle={styles.container}
       />
-      {!imageWidth || !imageheight || isImageFetching
-        ? <ActivityIndicator
+      {!imageWidth || !imageheight || isImageFetching ? (
+        <ActivityIndicator
           style={styles.activityIndicator}
           color={colors.mountainMeadow}
         />
-        : undefined
-      }
+      ) : undefined}
     </View>
   );
-}
+};
 export default CustomMessageImage;
 
 const styles = StyleSheet.create({

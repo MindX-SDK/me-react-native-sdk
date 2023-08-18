@@ -1,8 +1,7 @@
-import { FileHelper } from "../../utils";
-import { RemoteStorageService } from "./RemoteStorageService";
+import { FileHelper } from '../../utils';
+import { RemoteStorageService } from './RemoteStorageService';
 import AWS from 'aws-sdk';
-import { S3BucketConfigProps } from "./RemoteStorage.types";
-
+import { S3BucketConfigProps } from './RemoteStorage.types';
 
 export class S3BucketStorageService extends RemoteStorageService {
   private s3: AWS.S3;
@@ -15,15 +14,20 @@ export class S3BucketStorageService extends RemoteStorageService {
     this.bucketName = config.bucketName;
   }
 
-  uploadFile = async (path: string, uploadFileName: string): Promise<string> => {
+  uploadFile = async (
+    path: string,
+    uploadFileName: string
+  ): Promise<string> => {
     try {
       const blob = await FileHelper.uriToBlob(path);
 
-      const result = await this.s3.upload({
-        Bucket: this.bucketName,
-        Key: uploadFileName,
-        Body: blob,
-      }).promise()
+      const result = await this.s3
+        .upload({
+          Bucket: this.bucketName,
+          Key: uploadFileName,
+          Body: blob,
+        })
+        .promise();
       console.log(result);
 
       return result?.Location;
@@ -31,6 +35,5 @@ export class S3BucketStorageService extends RemoteStorageService {
       console.log(e);
       return '';
     }
-  }
-
+  };
 }

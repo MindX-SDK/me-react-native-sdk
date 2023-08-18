@@ -4,16 +4,16 @@ import { DateTimeHelper, screenWidth, st, vs } from '../../utils';
 import images from '../../utils/theme/image';
 import colors from '../../utils/theme/colors';
 import { isIOS } from '../../utils/constants/constants';
-import AudioRecorderPlayer, { PlayBackType } from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer, {
+  PlayBackType,
+} from 'react-native-audio-recorder-player';
 import Spacer from './Spacer';
 
 export type AudioPlayerProps = {
   uri: string;
-}
+};
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({
-  uri
-}) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ uri }) => {
   //States
   const [audioRecorderPlayer] = useState(new AudioRecorderPlayer());
   const [isPlaying, setIsPlaying] = useState(false);
@@ -67,23 +67,20 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
             style={styles.imageRecordButton}
           />
         </TouchableOpacity>
-          <Spacer width={10} />
+        <Spacer width={10} />
         <Image source={images.ic_record_line} style={styles.recordLineImage} />
       </View>
       <Spacer height={6} />
-      <Text style={styles.text}>
-        {DateTimeHelper.msToHMS(playbackMillis)}
-      </Text>
+      <Text style={styles.text}>{DateTimeHelper.msToHMS(playbackMillis)}</Text>
     </View>
-
   );
-}
+};
 
 export default AudioPlayer;
 
 const styles = StyleSheet.create({
   container: {
-    width: screenWidth * 3/4,
+    width: (screenWidth * 3) / 4,
     paddingVertical: vs(7),
     paddingLeft: vs(10),
     paddingRight: vs(15),
