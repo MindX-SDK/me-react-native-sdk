@@ -1,7 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { ColorValue, StyleSheet, View, ViewProps } from 'react-native';
 import colors from '../../utils/theme/colors';
-import { s, st, vs } from '../../utils';
+import { s, vs } from '../../utils';
 
 export type CustomArrowProps = ViewProps & {
   position: 'left' | 'right';
@@ -10,10 +11,14 @@ export type CustomArrowProps = ViewProps & {
 };
 
 const CustomArrow: React.FC<CustomArrowProps> = ({
-  children, position, borderColor, borderWidth = 0, ...restProps
+  children,
+  position,
+  borderColor,
+  borderWidth = 0,
+  ...restProps
 }) => {
-
-  const sideStyle = position === 'right' ? styles.rightTriangle : styles.leftTriangle;
+  const sideStyle =
+    position === 'right' ? styles.rightTriangle : styles.leftTriangle;
   return (
     <View {...restProps}>
       {children}
@@ -23,23 +28,27 @@ const CustomArrow: React.FC<CustomArrowProps> = ({
           sideStyle,
           {
             borderBottomColor: borderColor,
-            transform: [{scale: (10 + borderWidth * 2) / 10}, { rotate: '-90deg' }],
+            transform: [
+              { scale: (10 + borderWidth * 2) / 10 },
+              { rotate: '-90deg' },
+            ],
             marginLeft: position === 'left' ? -borderWidth * 2 - 1 : 0,
             marginRight: position === 'right' ? -borderWidth * 2 - 1 : 0,
-            left: position === 'left' && sideStyle?.left ? sideStyle?.left - borderWidth : undefined,
-            right: position === 'right' && sideStyle?.right ? sideStyle?.right - borderWidth : undefined,
-          }
+            left:
+              position === 'left' && sideStyle?.left
+                ? sideStyle?.left - borderWidth
+                : undefined,
+            right:
+              position === 'right' && sideStyle?.right
+                ? sideStyle?.right - borderWidth
+                : undefined,
+          },
         ]}
       />
-      <View
-        style={[
-          styles.triangle,
-          sideStyle,
-        ]}
-      />
+      <View style={[styles.triangle, sideStyle]} />
     </View>
   );
-}
+};
 
 export default CustomArrow;
 

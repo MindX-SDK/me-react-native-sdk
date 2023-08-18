@@ -1,9 +1,8 @@
 import React from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { BubbleProps } from 'react-native-gifted-chat';
 import { CustomIMessage, CustomReply } from '../../';
 import { s, st, vs } from '../../utils';
-import Lightbox, { LightboxProps } from 'react-native-lightbox-v2'
 import CustomArrow from '../CustomView/CustomArrow';
 import colors from '../../utils/theme/colors';
 import { isIOS } from '../../utils/constants/constants';
@@ -12,7 +11,7 @@ import CustomImage from '../CustomView/CustomImage';
 export type CustomQuickReplyProps = BubbleProps<CustomIMessage> & {
   onCutomQuickReply?: (btnData: CustomReply, idx?: number) => any;
   // lightboxProps?: LightboxProps;
-}
+};
 const IMAGE_DEFAULT_HEIGHT = vs(112);
 
 const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
@@ -26,14 +25,18 @@ const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
       <View key={`quickreply-item-${itm?.title}-${idx}`}>
         {/* {itm?.title !== itm?.value ? <Text style=>{itm?.title}</Text> : undefined} */}
         {itm?.['image-uri'] ? (
-          <CustomImage uri={itm?.['image-uri']} fixedHeight={IMAGE_DEFAULT_HEIGHT} />
+          <CustomImage
+            uri={itm?.['image-uri']}
+            fixedHeight={IMAGE_DEFAULT_HEIGHT}
+          />
         ) : undefined}
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
             onCutomQuickReply?.(itm, idx);
-          }}>
+          }}
+        >
           <Text style={styles.buttonText}>{itm?.title}</Text>
         </TouchableOpacity>
       </View>
@@ -47,12 +50,13 @@ const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
       borderWidth={1}
     >
       <View style={styles.bubble}>
-        <Text style={[
-          styles.messageText,
-          restProps?.position === 'right'
-            ? styles.messageTextRight
-            : undefined
-        ]}
+        <Text
+          style={[
+            styles.messageText,
+            restProps?.position === 'right'
+              ? styles.messageTextRight
+              : undefined,
+          ]}
         >
           {restProps?.currentMessage?.text}
         </Text>
@@ -61,10 +65,9 @@ const CustomQuickReply: React.FC<CustomQuickReplyProps> = ({
           {quickReplies?.map((it, idx) => renderQuickReplyItem(it, idx))}
         </View>
       </View>
-
     </CustomArrow>
   );
-}
+};
 
 export default CustomQuickReply;
 

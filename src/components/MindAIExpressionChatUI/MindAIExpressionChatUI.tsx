@@ -14,53 +14,60 @@ import { CustomReply } from '../../components';
 import DeviceInfo from 'react-native-device-info';
 import RemoteStorageModule from '../../services/RemoteStorage/RemoteStorageModule';
 import { RemoteStorageConfig } from '../../services/RemoteStorage/RemoteStorage.types';
-import { ConversationData, MindExpressionApiEvents } from '../../MindExpressionApi/MindExpressionApi.type';
+import {
+  ConversationData,
+  MindExpressionApiEvents,
+} from '../../MindExpressionApi/MindExpressionApi.type';
 import { MindExpressionApi } from '../../MindExpressionApi/MindExpressionApi';
-import { ButtonObjects, DateTimeObjects, GatewayResponse } from '../../services/ExpressionApi/ExpressionApi.types';
+import {
+  ButtonObjects,
+  DateTimeObjects,
+  GatewayResponse,
+} from '../../services/ExpressionApi/ExpressionApi.types';
 import { DateTimeHelper } from '../../utils';
 import ChatList from '../ChatList/ChatList';
 
 export type MindAIExpressionChatUIProps = {
-    /**
-     * Engine URL - You can get this on the integration page.
-     * This is the main URL you will use to access the API’s endpoint
-     */
-    ENGINE_URL: string;
-    /**
-     * Auth Key - This is the authorization token on the integration page.
-     * This token is used to authorize your access to the Mind Expression API.
-     */
-    AUTH_KEY: string;
-    /**
-     * Show log area or not
-     */
-    showLogCheck?: boolean;
-    /**
-     * Config of storage for media upload, please just config one of:
-     * @s3BucketConfig or @azureBlobStorageConfig or @firebaseStorageConfig
-     * SDK will only choose one of them.
-     */
-    remoteStorageConfig: RemoteStorageConfig
-    /**
-     * Show error message at bottom or not
-     */
-    showError?: boolean;
-    /**
-     * This is for test purpose only
-     * - mockedMessages: temp message items
-     */
-    test?: {
-        mockedMessages: ConversationData[];
-    }
-  }
-  
+  /**
+   * Engine URL - You can get this on the integration page.
+   * This is the main URL you will use to access the API’s endpoint
+   */
+  ENGINE_URL: string;
+  /**
+   * Auth Key - This is the authorization token on the integration page.
+   * This token is used to authorize your access to the Mind Expression API.
+   */
+  AUTH_KEY: string;
+  /**
+   * Show log area or not
+   */
+  showLogCheck?: boolean;
+  /**
+   * Config of storage for media upload, please just config one of:
+   * @s3BucketConfig or @azureBlobStorageConfig or @firebaseStorageConfig
+   * SDK will only choose one of them.
+   */
+  remoteStorageConfig: RemoteStorageConfig;
+  /**
+   * Show error message at bottom or not
+   */
+  showError?: boolean;
+  /**
+   * This is for test purpose only
+   * - mockedMessages: temp message items
+   */
+  test?: {
+    mockedMessages: ConversationData[];
+  };
+};
+
 const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
-    ENGINE_URL,
-    AUTH_KEY,
-    showLogCheck,
-    showError,
-    remoteStorageConfig,
-    test,
+  ENGINE_URL,
+  AUTH_KEY,
+  showLogCheck,
+  showError,
+  remoteStorageConfig,
+  test,
 }) => {
   //States
   const [mindExpressionAPI, setMindExpressionAPI] =
@@ -69,7 +76,7 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
   const [message, setMessage] = useState('');
   const [currentResponse, setCurrentResponse] = useState<GatewayResponse>();
   const [messagesHistory, setMessagesHistory] = useState<ConversationData[]>(
-    [],
+    []
   );
   const [logs, setLogs] = useState('');
   const [isCheckedLogs, setIsCheckedLogs] = useState(false);
@@ -81,15 +88,25 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
     if (remoteStorageConfig && !RemoteStorageModule?.getInstance()) {
       RemoteStorageModule.setup(remoteStorageConfig);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    const listener = mindExpressionAPI?.eventEmitter.on(MindExpressionApiEvents.NEW_MESSAGE, data => {
-      console.log('new message', data?.newMessage);
-      setMessagesHistory([...data?.conversationData, ...(test?.mockedMessages ?? []),]);
-    });
+    const listener = mindExpressionAPI?.eventEmitter.on(
+      MindExpressionApiEvents.NEW_MESSAGE,
+      (data) => {
+        console.log('new message', data?.newMessage);
+        setMessagesHistory([
+          ...data?.conversationData,
+          ...(test?.mockedMessages ?? []),
+        ]);
+      }
+    );
 
     return () => {
-      mindExpressionAPI?.eventEmitter?.removeListener(MindExpressionApiEvents.NEW_MESSAGE, listener);
+      mindExpressionAPI?.eventEmitter?.removeListener(
+        MindExpressionApiEvents.NEW_MESSAGE,
+        listener
+      );
     };
   });
 
@@ -98,7 +115,7 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
     setMindExpressionAPI(
       new MindExpressionApi(ENGINE_URL, AUTH_KEY, deviceUniqueId, {
         useLogger: true,
-      }),
+      })
     );
     setIsStarted(false);
     setMessage('');
@@ -131,7 +148,7 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
   const handleButtonAction = async (btnData: ButtonObjects) => {
     switch (btnData?.['button-type']) {
       case 'link': {
-        if(btnData?.link) {
+        if (btnData?.link) {
           Linking.openURL(btnData?.link);
         }
         break;
@@ -166,7 +183,11 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
     pickerProps?: DateTimeObjects
   ) => {
     if (datetime?.valueOf?.()) {
-      const finalStr = DateTimeHelper.formatMindXDatetime(datetime, endDate, pickerProps);
+      const finalStr = DateTimeHelper.formatMindXDatetime(
+        datetime,
+        endDate,
+        pickerProps
+      );
       converse(finalStr);
     }
   };
@@ -175,16 +196,17 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
     Keyboard.dismiss();
     const nLogs = mindExpressionAPI?.getLogs()?.join('\n\n') ?? '';
     setLogs(nLogs);
-    setIsCheckedLogs(prev => !prev);
+    setIsCheckedLogs((prev) => !prev);
   };
 
   const renderLogin = () => {
     return (
       <TouchableOpacity
-        style={[styles.button, { alignSelf: 'flex-end' }]}
+        style={[styles.button, styles.flexEnd]}
         onPress={() => {
           login();
-        }}>
+        }}
+      >
         <Text style={styles.buttonText}>login</Text>
       </TouchableOpacity>
     );
@@ -196,7 +218,8 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
         style={styles.button}
         onPress={() => {
           greeting();
-        }}>
+        }}
+      >
         <Text style={styles.buttonText}>Start</Text>
       </TouchableOpacity>
     );
@@ -205,14 +228,15 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
   const renderReset = () => {
     return (
       <TouchableOpacity
-        style={[styles.button, { alignSelf: 'flex-end' }]}
+        style={[styles.button, styles.flexEnd]}
         onPress={() => {
           restart();
-        }}>
+        }}
+      >
         <Text style={styles.buttonText}>Reset</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   const renderChat = () => {
     return (
@@ -222,7 +246,7 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
           _id: 'User',
         }}
         keyboardShouldPersistTaps={'handled'}
-        onSend={async messages => {
+        onSend={async (messages) => {
           for (let msg of messages) {
             await converse(msg.text);
           }
@@ -238,62 +262,61 @@ const MindAIExpressionChatUI: React.FC<MindAIExpressionChatUIProps> = ({
         }}
       />
     );
-  }
+  };
 
   const renderHeader = () => {
     return (
       <View style={styles.header}>
         <View style={styles.rowContainer}>
-          {showLogCheck
-            ? <TouchableOpacity
-                style={[styles.button, { alignSelf: 'flex-start' }]}
-                onPress={() => {
+          {showLogCheck ? (
+            <TouchableOpacity
+              style={[styles.button, styles.flexEnd]}
+              onPress={() => {
                 checkLogs();
-                }}>
-                <Text style={styles.buttonText}>
-                {isCheckedLogs ? 'Hide logs': 'Check Logs'}
-                </Text>
+              }}
+            >
+              <Text style={styles.buttonText}>
+                {isCheckedLogs ? 'Hide logs' : 'Check Logs'}
+              </Text>
             </TouchableOpacity>
-            : <View />}
+          ) : (
+            <View />
+          )}
           {!mindExpressionAPI
             ? renderLogin()
             : !isStarted
-              ? renderStart()
-              : renderReset()}
+            ? renderStart()
+            : renderReset()}
         </View>
-        <View style={{ height: 10 }} />
-        {showLogCheck && isCheckedLogs
-          ? <ScrollView style={styles.logScrollView}>
-            <Text style={styles.logText}>
-              {logs ? logs : 'No log found!'}
-            </Text>
+        <View style={styles.verticalSpacer} />
+        {showLogCheck && isCheckedLogs ? (
+          <ScrollView style={styles.logScrollView}>
+            <Text style={styles.logText}>{logs ? logs : 'No log found!'}</Text>
           </ScrollView>
-          : undefined
-        }
-
+        ) : undefined}
       </View>
     );
-  }
+  };
 
   return (
-    <View
-      style={styles.backgroundStyle}
-    >
+    <View style={styles.backgroundStyle}>
       {renderHeader()}
-      {mindExpressionAPI && isStarted
-        ? renderChat()
-        : undefined}
-      {showError && !currentResponse?.data?.['channel-result']?.length &&
-        currentResponse?.description ? (
+      {mindExpressionAPI && isStarted ? renderChat() : undefined}
+      {showError &&
+      !currentResponse?.data?.['channel-result']?.length &&
+      currentResponse?.description ? (
         <Text style={styles.errorText}>
           Error: {currentResponse?.description}
         </Text>
       ) : undefined}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  flexEnd: {
+    alignSelf: 'flex-end',
+  },
   backgroundStyle: {
     flex: 1,
     backgroundColor: '#F2F4F5',
@@ -343,6 +366,9 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  verticalSpacer: {
+    height: 10,
   },
 });
 

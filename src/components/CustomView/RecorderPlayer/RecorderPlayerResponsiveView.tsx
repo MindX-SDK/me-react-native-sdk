@@ -5,14 +5,30 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {st, vs} from '../../../utils/scaler';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { st, vs } from '../../../utils/scaler';
 import PopupManager from './RecorderPlayerResponsiveManager';
 import colors from '../../../utils/theme/colors';
 import { isIOS } from '../../../utils/constants/constants';
 import images from '../../../utils/theme/image';
 import Spacer from '../Spacer';
-import AudioRecorderPlayer, { AudioEncoderAndroidType, AudioSet, AudioSourceAndroidType, AVEncoderAudioQualityIOSType, AVEncodingOption, OutputFormatAndroidType, RecordBackType } from 'react-native-audio-recorder-player';
+import AudioRecorderPlayer, {
+  AudioEncoderAndroidType,
+  AudioSet,
+  AudioSourceAndroidType,
+  AVEncoderAudioQualityIOSType,
+  AVEncodingOption,
+  OutputFormatAndroidType,
+  RecordBackType,
+} from 'react-native-audio-recorder-player';
 import { DateTimeHelper } from '../../../utils';
 import RNBlobUtil from 'react-native-blob-util';
 
@@ -25,7 +41,7 @@ export type RecorderPlayerResponsiveRef = {
 export type RecorderPlayerShowFunctionProps = {
   onClose?: (result?: string) => any;
   type: 'record' | 'play'; //FIXME: type play still not handled
-  initalUrl?: string;
+  initialUrl?: string;
   position?: 'center' | 'topCenter' | 'bottomCenter';
   positionAt?: {
     top?: number;
@@ -39,8 +55,8 @@ export type RecorderPlayerShowFunctionProps = {
 };
 
 const RecorderPlayerResponsivePopup = (
-  props: any,
-  ref: Ref<RecorderPlayerResponsiveRef>,
+  _props: any,
+  ref: Ref<RecorderPlayerResponsiveRef>
 ) => {
   //States
   const [audioRecorderPlayer] = useState(new AudioRecorderPlayer());
@@ -48,8 +64,8 @@ const RecorderPlayerResponsivePopup = (
   const [showProps, setShowProps] = useState<RecorderPlayerShowFunctionProps>();
   const [recordMillis, setRecordMillis] = useState(0);
   const {
-    type,
-    initalUrl,
+    // type,
+    // initialUrl,
     position,
     positionAt,
     onClose,
@@ -82,7 +98,7 @@ const RecorderPlayerResponsivePopup = (
   });
 
   const togglePopup = () => {
-    setIsVisible(prev => !prev);
+    setIsVisible((prev) => !prev);
   };
 
   const showPopup = (showPopupProps: RecorderPlayerShowFunctionProps) => {
@@ -96,7 +112,7 @@ const RecorderPlayerResponsivePopup = (
 
   const hidePopup = () => {
     setIsVisible(false);
-    return 
+    return;
   };
 
   const selectPosition = (): ViewStyle => {
@@ -134,12 +150,9 @@ const RecorderPlayerResponsivePopup = (
       // console.log('record-back', e);
       setRecordMillis(e?.currentPosition);
     });
-    const uri = await audioRecorderPlayer?.startRecorder(
-      path,
-      audioSet,
-    );
+    const uri = await audioRecorderPlayer?.startRecorder(path, audioSet);
     console.log(`uri: ${uri}`);
-  }
+  };
 
   const handleStopRecord = async (isClose?: boolean) => {
     audioRecorderPlayer.removeRecordBackListener();
@@ -159,34 +172,46 @@ const RecorderPlayerResponsivePopup = (
           <Text style={styles.text}>
             {DateTimeHelper.msToHMS(recordMillis)}
           </Text>
-          <Image source={images.ic_record_line} style={styles.recordLineImage} />
+          <Image
+            source={images.ic_record_line}
+            style={styles.recordLineImage}
+          />
         </View>
         <Spacer height={16} />
         <View style={styles.rowContainer}>
           <TouchableOpacity
             onPress={() => {
-              handleStopRecord(true)
+              handleStopRecord(true);
             }}
           >
-            <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+            <Image
+              source={images.ic_trash_bin}
+              resizeMode={'contain'}
+              style={styles.imageTrashBtn}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               handleStopRecord();
             }}
           >
-            <Image source={images.ic_stop_play} resizeMode={'contain'} style={styles.imageRecordButton} />
+            <Image
+              source={images.ic_stop_play}
+              resizeMode={'contain'}
+              style={styles.imageRecordButton}
+            />
           </TouchableOpacity>
-          { extraButtonUI 
-            ? <TouchableOpacity
+          {extraButtonUI ? (
+            <TouchableOpacity
               onPress={() => {
                 onExtraButtonPress?.();
               }}
             >
               {extraButtonUI}
             </TouchableOpacity>
-            : <Spacer width={20} />
-          }
+          ) : (
+            <Spacer width={20} />
+          )}
         </View>
       </View>
     );

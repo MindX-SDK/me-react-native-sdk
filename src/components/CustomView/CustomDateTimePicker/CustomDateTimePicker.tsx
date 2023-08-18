@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from 'react-native';
 import colors from '../../../utils/theme/colors';
 import { DateTimeHelper, s, st, vs } from '../../../utils';
 import { DateTimeObjects } from '../../../services';
@@ -17,41 +23,45 @@ export type CustomDateTimePickerProps = ViewProps & {
 };
 
 const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
-  pickerProps, onConfirm, ...restProps
+  pickerProps,
+  onConfirm,
+  ...restProps
 }) => {
   const todayMoment = moment();
   const minDateMoment = DateTimeHelper.toMoment(pickerProps?.['min-date']);
   const maxDateMoment = DateTimeHelper.toMoment(pickerProps?.['max-date']);
   //States
-  const [date, setDate] = useState<Date | undefined>(
-    // pickerProps?.type === 'date_range' || 
-    //   (pickerProps?.['date-limit-type'] === 'future_only' &&
-    //   !pickerProps?.['include-current-date']) || 
-    //     (pickerProps?.['date-limit-type'] === 'limited' &&
-    //     !DateTimeHelper.isBetween(new Date(), minDateMoment?.toDate(), maxDateMoment?.toDate()))
-    //   ? undefined
-    //   : new Date()
-  );
+  const [date, setDate] = useState<Date | undefined>();
+  // pickerProps?.type === 'date_range' ||
+  //   (pickerProps?.['date-limit-type'] === 'future_only' &&
+  //   !pickerProps?.['include-current-date']) ||
+  //     (pickerProps?.['date-limit-type'] === 'limited' &&
+  //     !DateTimeHelper.isBetween(new Date(), minDateMoment?.toDate(), maxDateMoment?.toDate()))
+  //   ? undefined
+  //   : new Date()
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [time, setTime] = useState<Date>(
-    moment().set({hour: 1, minute: 0, second: 0, millisecond: 0}).toDate()
+    moment().set({ hour: 1, minute: 0, second: 0, millisecond: 0 }).toDate()
   );
   const [dateError, setDateError] = useState('');
   const [timeError, setTimeError] = useState('');
 
   //Variables that uses multiple times
-  const showPickDate = ['date', 'datetime', 'date_range'].includes(pickerProps?.type);
+  const showPickDate = ['date', 'datetime', 'date_range'].includes(
+    pickerProps?.type
+  );
   const showPickTime = ['datetime', 'time'].includes(pickerProps?.type);
   const isDateRange = pickerProps?.type === 'date_range';
   const timeParts = DateTimeHelper.getHourByPeriod(time);
   const locale = pickerProps?.language;
-  
+
   //Effects
   useEffect(() => {
     //Update minutes to nearest minutes in selection
-    time.setMinutes(minutes?.find(it => it >= timeParts?.minutes) ?? 0)
-    setTime(new Date(time))
-  }, [])
+    time.setMinutes(minutes?.find((it) => it >= timeParts?.minutes) ?? 0);
+    setTime(new Date(time));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //Functions
   const handleDateSelect = (day: DateData) => {
@@ -63,7 +73,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
 
     //Case 1: Pick 1 date only
     if (!isDateRange) {
-      if(!date || !mDay?.isSame(mStart)) {
+      if (!date || !mDay?.isSame(mStart)) {
         setDate(new Date(day.timestamp));
       } else {
         setDate(undefined);
@@ -93,13 +103,15 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         setDate(mDay.toDate());
       }
     }
-  }
+  };
 
   const handleConfirm = () => {
     const finalDate = date ? moment(date) : moment();
 
     if (isDateRange && (!date || !endDate)) {
-      setDateError(translate('please_select_a_valid_date_range', undefined, locale));
+      setDateError(
+        translate('please_select_a_valid_date_range', undefined, locale)
+      );
       return;
     } else if (showPickDate && !date) {
       setDateError(translate('please_select_a_date', undefined, locale));
@@ -116,12 +128,12 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     }
 
     onConfirm?.(finalDate.toDate(), endDate);
-  }
+  };
 
   const renderCommonTextGroup = (
     label: string,
     content: string | number = '',
-    customPrefixContent?: React.ReactNode,
+    customPrefixContent?: React.ReactNode
   ) => {
     return (
       <View style={styles.columnContainer}>
@@ -139,50 +151,51 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
       <View style={styles.rowContainer}>
         {showPickDate
           ? renderCommonTextGroup(
-            translate(isDateRange ? 'start_date' : 'selected_date', undefined, locale),
-            date
-              ? DateTimeHelper.formatMindXDatetime(
-                date,
+              translate(
+                isDateRange ? 'start_date' : 'selected_date',
                 undefined,
-                pickerProps,
-                { isDateOnly: true }
-              ) ?? '-'
-              : '-'
-          )
-          : undefined
-        }
-        {showPickDate
-          ? <Spacer width={10} />
-          : undefined
-        }
+                locale
+              ),
+              date
+                ? DateTimeHelper.formatMindXDatetime(
+                    date,
+                    undefined,
+                    pickerProps,
+                    { isDateOnly: true }
+                  ) ?? '-'
+                : '-'
+            )
+          : undefined}
+        {showPickDate ? <Spacer width={10} /> : undefined}
         {showPickTime
           ? renderCommonTextGroup(
-            translate('selected_time', undefined, locale),
-            time
-              ? translate(
-                `time_${DateTimeHelper.formatDate(time, 'A') ?? ''}` as TxKeyPath,
-                {time: (DateTimeHelper.formatDate(time, 'hh:mm ') ?? '')},
-                locale,
-              )
-              : '_'
-          )
+              translate('selected_time', undefined, locale),
+              time
+                ? translate(
+                    `time_${
+                      DateTimeHelper.formatDate(time, 'A') ?? ''
+                    }` as TxKeyPath,
+                    { time: DateTimeHelper.formatDate(time, 'hh:mm ') ?? '' },
+                    locale
+                  )
+                : '_'
+            )
           : isDateRange
-            ? renderCommonTextGroup(
+          ? renderCommonTextGroup(
               translate('end_date', undefined, locale),
               endDate
                 ? DateTimeHelper.formatMindXDatetime(
-                  endDate,
-                  undefined,
-                  pickerProps,
-                  { isDateOnly: true }
-                ) ?? '-'
+                    endDate,
+                    undefined,
+                    pickerProps,
+                    { isDateOnly: true }
+                  ) ?? '-'
                 : '-'
             )
-            : undefined
-        }
+          : undefined}
       </View>
     );
-  }
+  };
 
   const renderCalendar = () => {
     //Language
@@ -204,24 +217,28 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
     const minDateStr =
       pickerProps?.['date-limit-type'] === 'future_only'
         ? DateTimeHelper.formatDate(
-          pickerProps?.['include-current-date'] ? mToday.toDate() : mToday.add(1, 'd').toDate(),
-          'YYYY-MM-DD'
-        )
-        : pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['min-date']
-          ? minDateMoment?.format('YYYY-MM-DD')
-          : undefined;
-    const maxDateStr = pickerProps?.['date-limit-type'] === 'limited' && pickerProps?.['max-date']
-      ? maxDateMoment?.format('YYYY-MM-DD')
-      : undefined;
-
+            pickerProps?.['include-current-date']
+              ? mToday.toDate()
+              : mToday.add(1, 'd').toDate(),
+            'YYYY-MM-DD'
+          )
+        : pickerProps?.['date-limit-type'] === 'limited' &&
+          pickerProps?.['min-date']
+        ? minDateMoment?.format('YYYY-MM-DD')
+        : undefined;
+    const maxDateStr =
+      pickerProps?.['date-limit-type'] === 'limited' &&
+      pickerProps?.['max-date']
+        ? maxDateMoment?.format('YYYY-MM-DD')
+        : undefined;
 
     //Marking renders
-    var markedDates: MarkedDates = {}
+    var markedDates: MarkedDates = {};
     if (mStart) {
       if (isDateRange) {
         markedDates[mStart.format('YYYY-MM-DD')] = {
           startingDay: false,
-          endingDay: false,// !mEnd || mStart?.isSame(mEnd, 'd'),
+          endingDay: false, // !mEnd || mStart?.isSame(mEnd, 'd'),
           selected: true,
           disableTouchEvent: false,
           color: colors.earlyDawn,
@@ -233,7 +250,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             backgroundColor: colors.butterCup,
             marginRight: st(isIOS ? 4 : 6.8),
           },
-        }
+        };
       } else {
         markedDates[mStart.format('YYYY-MM-DD')] = {
           selected: true,
@@ -244,7 +261,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           endingDay: true,
           color: colors.butterCup,
           textColor: colors.white,
-        }
+        };
       }
     }
     if (mEnd) {
@@ -260,16 +277,19 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           width: st(36),
           height: st(36),
           backgroundColor: colors.butterCup,
-        }
-      }
+        },
+      };
     }
-    for (var m = moment(mStart).add(1, 'd'); mEnd && m?.isBefore(mEnd, 'd'); m?.add(1, 'd')) {
+    for (
+      var m = moment(mStart).add(1, 'd');
+      mEnd && m?.isBefore(mEnd, 'd');
+      m?.add(1, 'd')
+    ) {
       markedDates[m.format('YYYY-MM-DD')] = {
         color: colors.earlyDawn,
         startingDay: false,
         endingDay: false,
-      }
-
+      };
     }
 
     return (
@@ -278,32 +298,34 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
         <Calendar
           key={`calendar-${locale}`}
           theme={{
-            arrowColor: colors.shark,
-            textMonthFontWeight: 'bold',
-            textMonthFontSize: st(12),
-            monthTextColor: colors.shark,
-            textDayHeaderFontWeight: 'bold',
-            textDayHeaderFontSize: st(12),
-            dayTextColor: colors.black,
-            todayTextColor: colors.black, //FIXME: this will be overrided by below
-            todayButtonFontWeight: 'bold',
+            'arrowColor': colors.shark,
+            'textMonthFontWeight': 'bold',
+            'textMonthFontSize': st(12),
+            'monthTextColor': colors.shark,
+            'textDayHeaderFontWeight': 'bold',
+            'textDayHeaderFontSize': st(12),
+            'dayTextColor': colors.black,
+            'todayTextColor': colors.black, //FIXME: this will be overrided by below
+            'todayButtonFontWeight': 'bold',
             //@ts-ignore
             'stylesheet.day.basic': {
               todayText: {
                 fontWeight: 'bold',
-                color: colors.black
+                color: colors.black,
               },
             },
             //@ts-ignore
             'stylesheet.day.period': {
               todayText: {
                 fontWeight: 'bold',
-                color: colors.black
+                color: colors.black,
               },
-            }
+            },
           }}
-          initialDate={date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined}
-          onDayPress={day => {
+          initialDate={
+            date ? DateTimeHelper.formatDate(date, 'YYYY-MM-DD') : undefined
+          }
+          onDayPress={(day) => {
             handleDateSelect(day);
           }}
           monthFormat={locale === 'en' ? 'yyyy.M' : undefined}
@@ -311,32 +333,38 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
           markingType={isDateRange ? 'period' : 'dot'}
           minDate={minDateStr}
           maxDate={maxDateStr}
-          hideArrows={minDateMoment?.isSame(todayMoment, 'month') &&
+          hideArrows={
+            minDateMoment?.isSame(todayMoment, 'month') &&
             maxDateMoment?.isSame(todayMoment, 'month')
           }
         />
-        {dateError ? <Text style={styles.errorText}>{dateError}</Text> : undefined}
+        {dateError ? (
+          <Text style={styles.errorText}>{dateError}</Text>
+        ) : undefined}
       </View>
     );
-  }
+  };
 
   const renderTimePicker = () => {
     const isPM = timeParts?.period === 'PM';
     return (
       <View>
         <View style={styles.separator} />
-        <Text style={styles.subTitle}>{translate('time', undefined, locale)}</Text>
+        <Text style={styles.subTitle}>
+          {translate('time', undefined, locale)}
+        </Text>
         <View style={styles.rowContainer}>
           <CustomTimeDropdown
             data={hours}
             locale={locale}
             defaultValue={timeParts?.hours}
             selectedRowStyle={styles.selectedRow}
-            onSelect={(selectedItem, index) => {
+            onSelect={(selectedItem, _index) => {
               setTimeError('');
-              time.setHours(isPM && selectedItem !== 12
-                ? selectedItem + 12
-                : !isPM && selectedItem === 12
+              time.setHours(
+                isPM && selectedItem !== 12
+                  ? selectedItem + 12
+                  : !isPM && selectedItem === 12
                   ? 0
                   : selectedItem
               );
@@ -348,22 +376,22 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             locale={locale}
             defaultValue={timeParts?.minutes}
             selectedRowStyle={styles.selectedRow}
-            onSelect={(selectedItem, index) => {
+            onSelect={(selectedItem, _index) => {
               setTimeError('');
               time.setMinutes(selectedItem);
               setTime(new Date(time));
             }}
-
           />
           <CustomTimeDropdown
             data={timePeriod}
             locale={locale}
             defaultValue={timeParts?.period}
-            onSelect={(selectedItem, index) => {
+            onSelect={(selectedItem, _index) => {
               setTimeError('');
-              time?.setHours(selectedItem === 'PM' && timeParts?.hours !== 12
-                ? timeParts?.hours + 12
-                : selectedItem === 'AM' && timeParts?.hours === 12
+              time?.setHours(
+                selectedItem === 'PM' && timeParts?.hours !== 12
+                  ? timeParts?.hours + 12
+                  : selectedItem === 'AM' && timeParts?.hours === 12
                   ? 0
                   : timeParts?.hours
               );
@@ -371,24 +399,26 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
             }}
           />
         </View>
-        {timeError ? <Text style={styles.errorText}>{timeError}</Text> : undefined}
+        {timeError ? (
+          <Text style={styles.errorText}>{timeError}</Text>
+        ) : undefined}
       </View>
-    )
-  }
+    );
+  };
 
   const renderButton = () => {
     // || showPickDate && !date || showPickTime && !time //=> never happen since `date` and `time` have initial value
     return (
       <TouchableOpacity
         // disabled={isDisabled}
-        style={[
-          styles.button,
-        ]}
+        style={[styles.button]}
         onPress={() => {
-
           handleConfirm?.();
-        }}>
-        <Text style={styles.buttonText}>{pickerProps?.['button-label'] ?? 'Confirm'}</Text>
+        }}
+      >
+        <Text style={styles.buttonText}>
+          {pickerProps?.['button-label'] ?? 'Confirm'}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -403,7 +433,7 @@ const CustomDateTimePicker: React.FC<CustomDateTimePickerProps> = ({
       <Spacer height={16} />
     </View>
   );
-}
+};
 
 export default CustomDateTimePicker;
 
@@ -485,6 +515,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const hours = [...Array(12).keys()].map(it => it += 1); // start from 1 to 12
-const minutes = [...Array(60).keys()].filter(it => it % 5 === 0);
+const hours = [...Array(12).keys()].map((it) => (it += 1)); // start from 1 to 12
+const minutes = [...Array(60).keys()].filter((it) => it % 5 === 0);
 const timePeriod = ['AM', 'PM'];

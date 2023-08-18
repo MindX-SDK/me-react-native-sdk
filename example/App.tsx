@@ -5,17 +5,26 @@
  * @format
  */
 import React, { useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StatusBar,
-  StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { ConversationData, MindAIExpressionChatUI } from 'me-react-native-sdk';
 import {
   AUTH_KEY,
-  AZURE_SAS_TOKEN_STRING,
-  AZURE_STORAGE_CONTAINER_NAME,
-  AZURE_STORAGE_NAME,
+  // AZURE_SAS_TOKEN_STRING,
+  // AZURE_STORAGE_CONTAINER_NAME,
+  // AZURE_STORAGE_NAME,
   ENGINE_URL,
-  S3_BUCKET_NAME,
-  S3_BUCKET_CONFIG,
+  // S3_BUCKET_NAME,
+  // S3_BUCKET_CONFIG,
   FIREBASE_STORAGE_ROOT_DIR,
   FIREBASE_CONFIG,
 } from './src/constants/AppConstants';
@@ -31,30 +40,31 @@ function App(): JSX.Element {
         <TextInput
           onChangeText={setEngineUrl}
           value={engineUrl}
-          placeholder='enter engine url'
+          placeholder="enter engine url"
           multiline
           style={styles.textInput}
         />
-        <View style={{ height: 10 }} />
+        <View style={styles.verticalSpacing} />
         <TextInput
           onChangeText={setAuthKey}
           value={authKey}
-          placeholder='enter auth key'
+          placeholder="enter auth key"
           multiline
           style={styles.textInput}
         />
-        <View style={{ height: 10 }} />
+        <View style={styles.verticalSpacing} />
         <TouchableOpacity
-          style={[styles.button, { alignSelf: 'flex-end' }]}
+          style={[styles.button, styles.flexEnd]}
           onPress={() => {
             Keyboard.dismiss();
             setConfirm(true);
-          }}>
+          }}
+        >
           <Text style={styles.buttonText}>Confirm</Text>
         </TouchableOpacity>
       </ScrollView>
-    )
-  }
+    );
+  };
   const renderChat = () => {
     return (
       <MindAIExpressionChatUI
@@ -74,30 +84,30 @@ function App(): JSX.Element {
           firebaseStorageConfig: {
             rootDirectory: FIREBASE_STORAGE_ROOT_DIR,
             options: FIREBASE_CONFIG,
-          }
+          },
         }}
         test={{
           mockedMessages: mockData,
         }}
       />
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.backgroundStyle}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#F2F4F5'} />
-      <View style={{ height: 10 }} />
+      <View style={styles.verticalSpacing} />
       <Text style={styles.highlight}>Demo Mind EXPRESSION API</Text>
-      <View style={{ height: 10 }} />
-      {isConfirm
-        ? renderChat()
-        : renderInputUrl()
-      }
+      <View style={styles.verticalSpacing} />
+      {isConfirm ? renderChat() : renderInputUrl()}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  flexEnd: {
+    alignSelf: 'flex-end',
+  },
   backgroundStyle: {
     flex: 1,
     backgroundColor: '#F2F4F5',
@@ -140,6 +150,9 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  verticalSpacing: {
+    height: 10,
   },
 });
 

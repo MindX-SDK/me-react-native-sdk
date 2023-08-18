@@ -34,21 +34,23 @@
 
 ## Installation
 **NOTICE: PLEASE USE NODE VERSION >=18**
-### Step 1
-Our app depend on some react-native libraries that have native modules, so please add it properly using below commands:
-  ```
-  npm install me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
-  ```
-  or 
+### Step 1: Install packages
+Our app depend on some react-native libraries that have native modules, so please add it properly using below command:
   ```
   yarn add me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob
   ```
+  Or via npm (please notice that npm flow is unsafe since it required to use `--legacy-peer-deps`):
+  ```
+  npm install react-native-audio-recorder-player react-native-auto-height-image react-native-blob-util react-native-calendars react-native-device-info react-native-document-picker react-native-get-random-values react-native-gifted-chat react-native-image-crop-picker react-native-pdf react-native-select-dropdown react-native-svg react-native-url-polyfill react-native-video text-encoding-polyfill axios@1.3.2 expo-modules-core @azure/core-asynciterator-polyfill @azure/storage-blob me-react-native-sdk@https://github.com/MindX-SDK/me-react-native-sdk.git#develop --legacy-peer-deps
+  ```
+  
 
-### Step 2
+### Step 2 installl CocoaPods packages
+Trigger command:
   ```
-  npx pod-install
+  cd ios && pod install
   ```
-### Step 3
+### Step 3: Setting project
 
 #### Setting react-native project
   ```

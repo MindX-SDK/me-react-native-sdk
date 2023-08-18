@@ -29,7 +29,7 @@ class RecorderPlayerResponsiveManager {
   }
 
   async showPopup(props: RecorderPlayerShowFunctionProps) {
-    if (!await this.checkPermissions()) {
+    if (!(await this.checkPermissions())) {
       return;
     }
 
@@ -45,11 +45,11 @@ class RecorderPlayerResponsiveManager {
   }
 
   async showPopupAsync(
-    props: RecorderPlayerShowFunctionProps,
+    props: RecorderPlayerShowFunctionProps
   ): Promise<string> {
     if (this?._currentPopup) {
       return await new Promise(async (resolve, reject) => {
-        if (!await this.checkPermissions()) {
+        if (!(await this.checkPermissions())) {
           return reject('Permissions not granted');
         }
 
@@ -69,7 +69,6 @@ class RecorderPlayerResponsiveManager {
     return Promise.reject('Popup not initialized');
   }
 
-
   //Private functions
   /**
    * Check Permission for start record
@@ -87,19 +86,16 @@ class RecorderPlayerResponsiveManager {
         // console.log('Record permissions:', grants);
 
         if (
-          (
-            (grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-              PermissionsAndroid.RESULTS.GRANTED &&
+          ((grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
             grants['android.permission.READ_EXTERNAL_STORAGE'] ===
               PermissionsAndroid.RESULTS.GRANTED) ||
-            releaseVersion >= '13'
-          ) &&
+            releaseVersion >= '13') &&
           grants['android.permission.RECORD_AUDIO'] ===
             PermissionsAndroid.RESULTS.GRANTED
         ) {
           // console.log('permissions granted');
           return true;
-
         } else {
           // console.log('All required permissions not granted');
           return false;

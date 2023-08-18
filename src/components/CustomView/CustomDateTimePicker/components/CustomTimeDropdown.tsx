@@ -1,7 +1,9 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { s, st, vs } from '../../../../utils';
-import SelectDropdown, { SelectDropdownProps } from 'react-native-select-dropdown';
+import SelectDropdown, {
+  SelectDropdownProps,
+} from 'react-native-select-dropdown';
 import colors from '../../../../utils/theme/colors';
 import { isIOS } from '../../../../utils/constants/constants';
 import images from '../../../../utils/theme/image';
@@ -12,13 +14,13 @@ export type CustomTimeDropdownProps = SelectDropdownProps & {
 };
 
 const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
-  buttonStyle, locale, ...restProps
+  buttonStyle,
+  locale,
+  ...restProps
 }) => {
-
   const renderTextLabel = (item: string | number, _index: number) => {
-    const valStr = typeof item === 'number' && item < 10
-      ? `0${item}`
-      : item?.toString();
+    const valStr =
+      typeof item === 'number' && item < 10 ? `0${item}` : item?.toString();
 
     return (
       <Text style={styles.text}>
@@ -27,12 +29,11 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
     );
   };
   const renderTextItem = (item: string | number, index: number) => {
-    const valStr = typeof item === 'number' && item < 10
-      ? `0${item}`
-      : item?.toString();
+    const valStr =
+      typeof item === 'number' && item < 10 ? `0${item}` : item?.toString();
 
     return (
-      <View style={styles.textItem}>
+      <View style={styles.textItem} key={`textItem-${index}`}>
         <Text style={[styles.text, styles.opionText]}>
           {translate(valStr as TxKeyPath, undefined, locale)}
         </Text>
@@ -42,12 +43,16 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
 
   const renderSelectedContent = (
     selectedItem: string | number,
-    index: number,
+    index: number
   ) => {
     return (
       <View style={styles.rowContainer}>
         {renderTextLabel(selectedItem, index)}
-        <Image source={images.ic_arrow_down} resizeMode={'contain'} style={styles.arrowDown}/> 
+        <Image
+          source={images.ic_arrow_down}
+          resizeMode={'contain'}
+          style={styles.arrowDown}
+        />
       </View>
     );
   };
@@ -56,23 +61,21 @@ const CustomTimeDropdown: React.FC<CustomTimeDropdownProps> = ({
     <View style={styles.container}>
       <SelectDropdown
         {...restProps}
-        buttonStyle={[styles.button, buttonStyle ]}
-        buttonTextAfterSelection={(selectedItem, index) => {
-          return selectedItem
+        buttonStyle={[styles.button, buttonStyle]}
+        buttonTextAfterSelection={(selectedItem, _index) => {
+          return selectedItem;
         }}
-        rowTextForSelection={(item, index) => {
-          return item
+        rowTextForSelection={(item, _index) => {
+          return item;
         }}
         renderCustomizedButtonChild={(selectedItem, index) =>
           renderSelectedContent(selectedItem, index)
         }
         renderCustomizedRowChild={(item, index) => renderTextItem(item, index)}
       />
-
     </View>
-  )
-
-}
+  );
+};
 
 export default CustomTimeDropdown;
 
@@ -117,5 +120,5 @@ const styles = StyleSheet.create({
   arrowDown: {
     width: st(10),
     height: st(10),
-  }
+  },
 });

@@ -1,6 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native';
-import { s, scale, screenHeight, screenWidth, st, vs } from '../../../../utils';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewProps,
+} from 'react-native';
+import { screenHeight, screenWidth, st, vs } from '../../../../utils';
 import colors from '../../../../utils/theme/colors';
 import { UploadFileProps } from '../../../components.types';
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -38,14 +45,22 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onClose?.();
             }}
           >
-            <Image source={images.ic_close} resizeMode={'contain'} style={styles.imageCloseBtn} />
+            <Image
+              source={images.ic_close}
+              resizeMode={'contain'}
+              style={styles.imageCloseBtn}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               onRemove?.(itm, idx);
             }}
           >
-            <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+            <Image
+              source={images.ic_trash_bin}
+              resizeMode={'contain'}
+              style={styles.imageTrashBtn}
+            />
           </TouchableOpacity>
         </View>
         <AutoHeightImage
@@ -55,8 +70,8 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
           style={styles.imageAtt}
         />
       </>
-    )
-  }
+    );
+  };
 
   const renderAttachmentVideo = (itm: UploadFileProps, idx: number) => {
     return (
@@ -67,23 +82,32 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onClose?.();
             }}
           >
-            <Image source={images.ic_close} resizeMode={'contain'} style={styles.imageCloseBtn} />
+            <Image
+              source={images.ic_close}
+              resizeMode={'contain'}
+              style={styles.imageCloseBtn}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               onRemove?.(itm, idx);
             }}
           >
-            <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+            <Image
+              source={images.ic_trash_bin}
+              resizeMode={'contain'}
+              style={styles.imageTrashBtn}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.videoContainer}>
+          {/* @ts-ignore */}
           <Video
             ref={videoRef}
             source={{ uri: itm.uri }}
             resizeMode={'contain'}
             style={styles.videoAtt}
-            onLoad={(videoData) => {
+            onLoad={(_videoData) => {
               videoRef?.current?.seek(0);
               setPaused(true);
             }}
@@ -93,8 +117,8 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
           />
         </View>
       </>
-    )
-  }
+    );
+  };
 
   const renderAttachmentPDF = (itm: UploadFileProps, idx: number) => {
     return (
@@ -105,13 +129,13 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onClose?.();
             }}
           >
-            <Image source={images.ic_close} resizeMode={'contain'} style={styles.imageCloseBtn} />
+            <Image
+              source={images.ic_close}
+              resizeMode={'contain'}
+              style={styles.imageCloseBtn}
+            />
           </TouchableOpacity>
-          <Text
-            style={styles.title}
-            numberOfLines={1}
-            ellipsizeMode={'middle'}
-          >
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode={'middle'}>
             {itm?.name}
           </Text>
           <TouchableOpacity
@@ -119,33 +143,37 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onRemove?.(itm, idx);
             }}
           >
-            <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+            <Image
+              source={images.ic_trash_bin}
+              resizeMode={'contain'}
+              style={styles.imageTrashBtn}
+            />
           </TouchableOpacity>
         </View>
         <Pdf
           source={{ uri: itm.uri }}
-          onLoadComplete={(numberOfPages,filePath) => {
-              console.log(`Number of pages: ${numberOfPages}`);
+          onLoadComplete={(numberOfPages, _filePath) => {
+            console.log(`Number of pages: ${numberOfPages}`);
           }}
-          onPageChanged={(page,numberOfPages) => {
-              console.log(`Current page: ${page}`);
+          onPageChanged={(page, _numberOfPages) => {
+            console.log(`Current page: ${page}`);
           }}
           onError={(error) => {
-              console.log(error);
+            console.log(error);
           }}
           onPressLink={(uri) => {
-              console.log(`Link pressed: ${uri}`);
+            console.log(`Link pressed: ${uri}`);
           }}
           style={styles.pdfAtt}
         />
       </>
-    )
-  }
+    );
+  };
 
   const renderAttachmentAudioPlayer = (itm: UploadFileProps, idx: number) => {
     return (
       <>
-        <PreviewAudioPlayer 
+        <PreviewAudioPlayer
           audioPath={itm?.uri}
           onRemove={() => {
             onRemove?.(itm, idx);
@@ -153,8 +181,8 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
         />
         <Spacer height={20} />
       </>
-    )
-  }
+    );
+  };
 
   const renderAttachmentUnknown = (itm: UploadFileProps, idx: number) => {
     return (
@@ -165,13 +193,13 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onClose?.();
             }}
           >
-            <Image source={images.ic_close} resizeMode={'contain'} style={styles.imageCloseBtn} />
+            <Image
+              source={images.ic_close}
+              resizeMode={'contain'}
+              style={styles.imageCloseBtn}
+            />
           </TouchableOpacity>
-          <Text
-            style={styles.title}
-            numberOfLines={1}
-            ellipsizeMode={'middle'}
-          >
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode={'middle'}>
             {itm?.name}
           </Text>
           <TouchableOpacity
@@ -179,21 +207,21 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
               onRemove?.(itm, idx);
             }}
           >
-            <Image source={images.ic_trash_bin} resizeMode={'contain'} style={styles.imageTrashBtn} />
+            <Image
+              source={images.ic_trash_bin}
+              resizeMode={'contain'}
+              style={styles.imageTrashBtn}
+            />
           </TouchableOpacity>
         </View>
         <Spacer height={20} />
-        <Text
-          style={styles.text}
-          numberOfLines={1}
-          ellipsizeMode={'middle'}
-        >
+        <Text style={styles.text} numberOfLines={1} ellipsizeMode={'middle'}>
           {itm?.type}
         </Text>
         <Spacer height={20} />
       </>
-    )
-  }
+    );
+  };
 
   const renderAttachmentItem = (itm: UploadFileProps, idx: number) => {
     let content: React.ReactNode;
@@ -210,19 +238,14 @@ const AttachmentPreview: React.FC<AttachmentPreviewProps> = ({
       content = renderAttachmentUnknown(itm, idx);
     }
 
-    return (
-      <View key={`attachment-${itm}-${idx}`}>
-        {content}
-      </View>
-    );
-  }
+    return <View key={`attachment-${itm}-${idx}`}>{content}</View>;
+  };
   return (
     <View style={[styles.container, style]} {...restProps}>
       {attachments?.map((it, idx) => renderAttachmentItem(it, idx))}
     </View>
-  )
-
-}
+  );
+};
 
 export default AttachmentPreview;
 
@@ -256,7 +279,7 @@ const styles = StyleSheet.create({
   videoAtt: {
     borderRadius: st(5),
     width: screenWidth - st(20) * 2,
-    minHeight: (screenWidth - st(20) * 2) * 9 / 16 + vs(80), // 16:9 frames + expand 80h
+    minHeight: ((screenWidth - st(20) * 2) * 9) / 16 + vs(80), // 16:9 frames + expand 80h
   },
   pdfAtt: {
     // flex: 1,

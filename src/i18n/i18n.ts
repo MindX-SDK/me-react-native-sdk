@@ -5,7 +5,7 @@ import ko from './lang/ko.json';
 import th from './lang/th.json';
 
 i18n.fallbacks = true;
-i18n.translations = {en, ko, th};
+i18n.translations = { en, ko, th };
 
 i18n.locale = 'en'; //moment.locale() || 'en';
 
@@ -33,7 +33,7 @@ type RecursiveKeyOfInner<TObj extends object> = {
 
 type RecursiveKeyOfHandleValue<
   TValue,
-  Text extends string,
+  Text extends string
 > = TValue extends any[]
   ? Text
   : TValue extends object

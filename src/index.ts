@@ -7,7 +7,4 @@ export * from './components';
 import ChatList from './components/ChatList/ChatList';
 import MindAIExpressionChatUI from './components/MindAIExpressionChatUI/MindAIExpressionChatUI';
 
-export {
-    ChatList,
-    MindAIExpressionChatUI,
-};
+export { ChatList, MindAIExpressionChatUI };

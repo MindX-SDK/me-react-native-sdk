@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import Svg, {Path, SvgProps} from 'react-native-svg';
-import {s, st, vs} from '../../../utils/scaler';
+import { StyleSheet, Text, View } from 'react-native';
+import Svg, { Path, SvgProps } from 'react-native-svg';
+import { s, st } from '../../../utils/scaler';
 import { isIOS } from '../../../utils/constants/constants';
 import colors from '../../../utils/theme/colors';
 
@@ -21,7 +21,8 @@ function SvgCustomFile({
           width: s(28),
           height: s(37),
         },
-      ]}>
+      ]}
+    >
       <Svg
         width={s(28)}
         height={s(37)}
@@ -37,7 +38,10 @@ function SvgCustomFile({
           strokeWidth={2}
           strokeLinejoin="round"
         />
-        <Path d="M14.813 1v9.622a2.566 2.566 0 002.565 2.566H27" fill="#BCB5FF" />
+        <Path
+          d="M14.813 1v9.622a2.566 2.566 0 002.565 2.566H27"
+          fill="#BCB5FF"
+        />
         <Path
           d="M14.813 1v9.622a2.566 2.566 0 002.565 2.566H27L14.812 1z"
           stroke="#BCB5FF"
